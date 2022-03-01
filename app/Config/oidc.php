@@ -27,7 +27,7 @@ return [
 
     // Public key that's used to verify the JWT token with.
     // Can be the key value itself or a local 'file://public.key' reference.
-    'jwt_public_key' => env('OIDC_PUBLIC_KEY', null),
+    'jwt_public_key' => env('OIDC_PUBLIC_KEY', 'file://' . storage_path('public.key')),
 
     // OAuth2 endpoints.
     'authorization_endpoint' => env('OIDC_AUTH_ENDPOINT', null),
