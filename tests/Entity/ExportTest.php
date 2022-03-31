@@ -268,7 +268,7 @@ class ExportTest extends TestCase
         foreach ($entities as $entity) {
             $resp = $this->asEditor()->get($entity->getUrl('/export/html'));
             $resp->assertDontSee('window.donkey');
-            $resp->assertDontSee('script');
+            $resp->assertDontSee('<script', false);
             $resp->assertSee('.my-test-class { color: red; }');
         }
     }
@@ -386,6 +386,18 @@ class ExportTest extends TestCase
         $resp->assertSee("# Dogcat\n\n```JavaScript\nvar a = 'cat';\n```\n\nAnother line", false);
     }
 
+    public function test_page_markdown_export_handles_tasklist_checkboxes()
+    {
+        $page = Page::query()->first()->forceFill([
+            'markdown' => '',
+            'html'     => '<ul><li><input type="checkbox" checked="checked">Item A</li><li><input type="checkbox">Item B</li></ul>',
+        ]);
+        $page->save();
+
+        $resp = $this->asEditor()->get($page->getUrl('/export/markdown'));
+        $resp->assertSee("- [x] Item A\n- [ ] Item B", false);
+    }
+
     public function test_chapter_markdown_export()
     {
         $chapter = Chapter::query()->first();
@@ -406,6 +418,25 @@ class ExportTest extends TestCase
         $resp->assertSee('# ' . $book->name);
         $resp->assertSee('# ' . $chapter->name);
         $resp->assertSee('# ' . $page->name);
+    }
+
+    public function test_book_markdown_export_concats_immediate_pages_with_newlines()
+    {
+        /** @var Book $book */
+        $book = Book::query()->whereHas('pages')->first();
+
+        $this->asEditor()->get($book->getUrl('/create-page'));
+        $this->get($book->getUrl('/create-page'));
+
+        [$pageA, $pageB] = $book->pages()->where('chapter_id', '=', 0)->get();
+        $pageA->html = '<p>hello tester</p>';
+        $pageA->save();
+        $pageB->name = 'The second page in this test';
+        $pageB->save();
+
+        $resp = $this->get($book->getUrl('/export/markdown'));
+        $resp->assertDontSee('hello tester# The second page in this test');
+        $resp->assertSee("hello tester\n\n# The second page in this test");
     }
 
     public function test_export_option_only_visible_and_accessible_with_permission()
@@ -447,5 +478,19 @@ class ExportTest extends TestCase
         config()->set('app.allow_untrusted_server_fetching', true);
         $resp = $this->get($page->getUrl('/export/pdf'));
         $resp->assertStatus(500); // Bad response indicates wkhtml usage
+    }
+
+    public function test_html_exports_contain_csp_meta_tag()
+    {
+        $entities = [
+            Page::query()->first(),
+            Book::query()->first(),
+            Chapter::query()->first(),
+        ];
+
+        foreach ($entities as $entity) {
+            $resp = $this->asEditor()->get($entity->getUrl('/export/html'));
+            $resp->assertElementExists('head meta[http-equiv="Content-Security-Policy"][content*="script-src "]');
+        }
     }
 }
