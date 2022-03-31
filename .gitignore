@@ -14,6 +14,7 @@ yarn-error.log
 /storage/images
 _ide_helper.php
 /storage/debugbar
+/storage/*.key
 .phpstorm.meta.php
 yarn.lock
 /bin
