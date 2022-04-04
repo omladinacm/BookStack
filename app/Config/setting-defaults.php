@@ -23,6 +23,7 @@ return [
     'page-draft-color'     => '#7e50b1',
     'app-custom-head'      => false,
     'registration-enabled' => false,
+    'registration-role'    => 3,
 
     // User-level default settings
     'user' => [
