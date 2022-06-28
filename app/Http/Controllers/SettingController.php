@@ -19,7 +19,7 @@ class SettingController extends Controller
     }
 
     /**
-     * Handle requests to the settings index path
+     * Handle requests to the settings index path.
      */
     public function index()
     {
@@ -83,7 +83,7 @@ class SettingController extends Controller
         $this->logActivity(ActivityType::SETTINGS_UPDATE, $category);
         $this->showSuccessNotification(trans('settings.settings_save_success'));
 
-        return redirect("/settings/${category}");
+        return redirect("/settings/{$category}");
     }
 
     protected function ensureCategoryExists(string $category): void
