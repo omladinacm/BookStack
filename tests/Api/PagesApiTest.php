@@ -249,10 +249,12 @@ class PagesApiTest extends TestCase
         DB::table('pages')->where('id', '=', $page->id)->update(['updated_at' => Carbon::now()->subWeek()]);
 
         $details = [
-            'tags' => [['name' => 'Category', 'value' => 'Testing']]
+            'tags' => [['name' => 'Category', 'value' => 'Testing']],
         ];
 
-        $this->putJson($this->baseEndpoint . "/{$page->id}", $details);
+        $resp = $this->putJson($this->baseEndpoint . "/{$page->id}", $details);
+        $resp->assertOk();
+
         $page->refresh();
         $this->assertGreaterThan(Carbon::now()->subDay()->unix(), $page->updated_at->unix());
     }
