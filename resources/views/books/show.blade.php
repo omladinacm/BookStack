@@ -13,6 +13,8 @@
     @endif
 @endpush
 
+@include('entities.body-tag-classes', ['entity' => $book])
+
 @section('body')
 
     <div class="mb-s">
@@ -160,7 +162,7 @@
 
     @if(count($bookParentShelves) > 0)
         <div class="actions mb-xl">
-            <h5>{{ trans('entities.shelves_long') }}</h5>
+            <h5>{{ trans('entities.shelves') }}</h5>
             @include('entities.list', ['entities' => $bookParentShelves, 'style' => 'compact'])
         </div>
     @endif

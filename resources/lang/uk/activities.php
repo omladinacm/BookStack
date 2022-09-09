@@ -28,8 +28,8 @@ return [
     // Books
     'book_create'                 => 'створив книгу',
     'book_create_notification'    => 'Книгу успішно створено',
-    'book_create_from_chapter'              => 'converted chapter to book',
-    'book_create_from_chapter_notification' => 'Chapter successfully converted to a book',
+    'book_create_from_chapter'              => 'перетворений розділ в книгу',
+    'book_create_from_chapter_notification' => 'Розділ успішно перетворений в книгу',
     'book_update'                 => 'оновив книгу',
     'book_update_notification'    => 'Книгу успішно оновлено',
     'book_delete'                 => 'видалив книгу',
@@ -38,14 +38,14 @@ return [
     'book_sort_notification'      => 'Книгу успішно відновлено',
 
     // Bookshelves
-    'bookshelf_create'            => 'створив книжкову полицю',
-    'bookshelf_create_notification'    => 'Книжкову полицю успішно створено',
-    'bookshelf_create_from_book'    => 'converted book to bookshelf',
-    'bookshelf_create_from_book_notification'    => 'Book successfully converted to a shelf',
-    'bookshelf_update'                 => 'оновив книжкову полицю',
-    'bookshelf_update_notification'    => 'Книжкову полицю успішно оновлено',
-    'bookshelf_delete'                 => 'видалив книжкову полицю',
-    'bookshelf_delete_notification'    => 'Книжкову полицю успішно видалено',
+    'bookshelf_create'            => 'created shelf',
+    'bookshelf_create_notification'    => 'Shelf successfully created',
+    'bookshelf_create_from_book'    => 'converted book to shelf',
+    'bookshelf_create_from_book_notification'    => 'Книжку успішно конвертовано на полицю',
+    'bookshelf_update'                 => 'updated shelf',
+    'bookshelf_update_notification'    => 'Shelf successfully updated',
+    'bookshelf_delete'                 => 'deleted shelf',
+    'bookshelf_delete_notification'    => 'Shelf successfully deleted',
 
     // Favourites
     'favourite_add_notification' => '":ім\'я" було додане до ваших улюлених',

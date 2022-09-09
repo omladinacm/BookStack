@@ -28,8 +28,8 @@ return [
     // Books
     'book_create'                 => 'ایجاد کتاب',
     'book_create_notification'    => 'کتاب با موفقیت ایجاد شد',
-    'book_create_from_chapter'              => 'converted chapter to book',
-    'book_create_from_chapter_notification' => 'Chapter successfully converted to a book',
+    'book_create_from_chapter'              => 'تبدیل فصل به کتاب',
+    'book_create_from_chapter_notification' => 'فصل با موفقیت به یک کتاب تبدیل شد',
     'book_update'                 => 'به روزرسانی کتاب',
     'book_update_notification'    => 'کتاب با موفقیت به روزرسانی شد',
     'book_delete'                 => 'حذف کتاب',
@@ -38,13 +38,13 @@ return [
     'book_sort_notification'      => 'کتاب با موفقیت مرتب سازی شد',
 
     // Bookshelves
-    'bookshelf_create'            => 'ایجاد قفسه کتاب',
+    'bookshelf_create'            => 'created shelf',
     'bookshelf_create_notification'    => 'قفسه کتاب با موفقیت ایجاد شد',
-    'bookshelf_create_from_book'    => 'converted book to bookshelf',
-    'bookshelf_create_from_book_notification'    => 'Book successfully converted to a shelf',
-    'bookshelf_update'                 => 'به روزرسانی قفسه کتاب',
-    'bookshelf_update_notification'    => 'قفسه کتاب با موفقیت به روزرسانی شد',
-    'bookshelf_delete'                 => 'حذف قفسه کتاب',
+    'bookshelf_create_from_book'    => 'converted book to shelf',
+    'bookshelf_create_from_book_notification'    => 'کتاب با موفقیت به یک قفسه تبدیل شد',
+    'bookshelf_update'                 => 'updated shelf',
+    'bookshelf_update_notification'    => 'Shelf successfully updated',
+    'bookshelf_delete'                 => 'deleted shelf',
     'bookshelf_delete_notification'    => 'قفسه کتاب با موفقیت حذف شد',
 
     // Favourites
