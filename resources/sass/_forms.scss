@@ -210,6 +210,10 @@ select {
   background-size: 12px;
   background-position: calc(100% - 20px) 70%;
   background-repeat: no-repeat;
+
+  @include rtl {
+    background-position: 20px 70%;
+  }
 }
 
 input[type=date] {
@@ -317,7 +321,8 @@ input[type=color] {
 
 .form-group[collapsible] {
   padding: 0 $-m;
-  border: 1px solid #DDD;
+  border: 1px solid;
+  @include lightDark(border-color, #DDD, #000);
   border-radius: 4px;
   .collapse-title {
     margin-inline-start: -$-m;
