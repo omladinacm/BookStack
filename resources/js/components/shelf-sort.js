@@ -1,6 +1,7 @@
 import Sortable from "sortablejs";
+import {Component} from "./component";
 
-class ShelfSort {
+export class ShelfSort extends Component {
 
     setup() {
         this.elem = this.$el;
@@ -15,10 +16,11 @@ class ShelfSort {
 
     initSortable() {
         const scrollBoxes = this.elem.querySelectorAll('.scroll-box');
-        for (let scrollBox of scrollBoxes) {
+        for (const scrollBox of scrollBoxes) {
             new Sortable(scrollBox, {
                 group: 'shelf-books',
                 ghostClass: 'primary-background-light',
+                handle: '.handle',
                 animation: 150,
                 onSort: this.onChange.bind(this),
             });
@@ -78,5 +80,3 @@ class ShelfSort {
     }
 
 }
-
-export default ShelfSort;

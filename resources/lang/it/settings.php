@@ -90,7 +90,7 @@ return [
     'maint_recycle_bin_desc' => 'Le librerie, i libri, i capitoli e le pagine cancellati vengono inviati al cestino in modo che possano essere ripristinati o eliminati definitivamente. Gli elementi più vecchi nel cestino possono essere automaticamente rimossi dopo un certo periodo, a seconda della configurazione del sistema.',
     'maint_recycle_bin_open' => 'Apri il Cestino',
     'maint_regen_references' => 'Rigenera Riferimenti',
-    'maint_regen_references_desc' => 'Questa azione ricostruirà l\'indice di dei riferimenti incrociati all\'interno del database. Di solito questa operazione è gestita automaticamente, ma può essere utile per indicizzare contenuti vecchi o aggiunti con metodi non ufficiali.',
+    'maint_regen_references_desc' => 'Questa azione ricostruirà l\'indice dei riferimenti incrociati all\'interno del database. Di solito questa operazione è gestita automaticamente, ma può essere utile per indicizzare contenuti vecchi o aggiunti con metodi non ufficiali.',
     'maint_regen_references_success' => 'L\'indice di riferimento è stato rigenerato!',
     'maint_timeout_command_note' => 'Nota: Questa azione può richiedere del tempo per essere eseguita e può causare problemi di timeout in alcuni ambienti Web. In alternativa, questa azione può essere eseguita usando un comando da terminale.',
 
@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => 'Ruoli',
     'role_user_roles' => 'Ruoli Utente',
+    'roles_index_desc' => 'I ruoli sono utilizzati per raggruppare gli utenti e fornire ai loro membri i permessi di sistema. Quando un utente è membro di più ruoli, i privilegi concessi si sovrappongono e l\'utente eredita tutte le abilità.',
+    'roles_x_users_assigned' => '1 utente assegnato|:count utenti assegnati',
+    'roles_x_permissions_provided' => '1 permesso|:count permessi',
+    'roles_assigned_users' => 'Utenti Assegnati',
+    'roles_permissions_provided' => 'Autorizzazioni fornite',
     'role_create' => 'Crea Nuovo Ruolo',
     'role_create_success' => 'Ruolo creato correttamente',
     'role_delete' => 'Elimina Ruolo',
@@ -161,7 +166,7 @@ return [
     'roles_system_warning' => 'Siate consapevoli che l\'accesso a uno dei tre permessi qui sopra, può consentire a un utente di modificare i propri privilegi o i privilegi di altri nel sistema. Assegna ruoli con questi permessi solo ad utenti fidati.',
     'role_asset_desc' => 'Questi permessi controllano l\'accesso di default alle entità. I permessi nei Libri, Capitoli e Pagine sovrascriveranno questi.',
     'role_asset_admins' => 'Gli amministratori hanno automaticamente accesso a tutti i contenuti ma queste opzioni possono mostrare o nascondere le opzioni della UI.',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => 'Questo si riferisce alla visibilità all\'interno del gestore di immagini. L\'accesso effettivo ai file di immagine caricati dipenderà dall\'opzione di archiviazione delle immagini di sistema.',
     'role_all' => 'Tutti',
     'role_own' => 'Propri',
     'role_controlled_by_asset' => 'Controllato dall\'entità in cui sono caricati',
@@ -172,6 +177,7 @@ return [
 
     // Users
     'users' => 'Utenti',
+    'users_index_desc' => 'Crea e gestisci account utente individuali all\'interno del sistema. Gli account utente sono utilizzati per il login e l\'attribuzione di contenuti e attività. Le autorizzazioni di accesso sono principalmente basate sui ruoli, ma la proprietà dei contenuti dell\'utente, insieme ad altri fattori, può influenzare le autorizzazioni e l\'accesso.',
     'user_profile' => 'Profilo Utente',
     'users_add_new' => 'Aggiungi Nuovo Utente',
     'users_search' => 'Cerca Utenti',
@@ -241,6 +247,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Webhooks',
+    'webhooks_index_desc' => 'I webhook sono un modo per inviare dati a URL esterne quando si verificano determinate azioni ed eventi all\'interno del sistema, consentendo l\'integrazione basata sugli eventi con piattaforme esterne, come sistemi di messaggistica o di notifica.',
+    'webhooks_x_trigger_events' => '1 evento trigger|:count eventi trigger',
     'webhooks_create' => 'Crea Nuovo Webhook',
     'webhooks_none_created' => 'Nessun webhook è stato creato.',
     'webhooks_edit' => 'Modifica Webhook',
@@ -280,6 +288,7 @@ return [
         'da' => 'Danese',
         'de' => 'Deutsch (Sie)',
         'de_informal' => 'Deutsch (Du)',
+        'el' => 'ελληνικά',
         'es' => 'Spagnolo',
         'es_AR' => 'Spagnolo d\'Argentina',
         'et' => 'Estone',

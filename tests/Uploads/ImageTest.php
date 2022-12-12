@@ -15,7 +15,7 @@ class ImageTest extends TestCase
 
     public function test_image_upload()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -39,7 +39,7 @@ class ImageTest extends TestCase
 
     public function test_image_display_thumbnail_generation_does_not_increase_image_size()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -63,7 +63,7 @@ class ImageTest extends TestCase
 
     public function test_image_display_thumbnail_generation_for_apng_images_uses_original_file()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -125,7 +125,7 @@ class ImageTest extends TestCase
 
     public function test_image_usage()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $editor = $this->getEditor();
         $this->actingAs($editor);
 
@@ -145,7 +145,7 @@ class ImageTest extends TestCase
 
     public function test_php_files_cannot_be_uploaded()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -167,7 +167,7 @@ class ImageTest extends TestCase
 
     public function test_php_like_files_cannot_be_uploaded()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -184,7 +184,7 @@ class ImageTest extends TestCase
 
     public function test_files_with_double_extensions_will_get_sanitized()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 
@@ -219,7 +219,7 @@ class ImageTest extends TestCase
         ];
         foreach ($badNames as $name) {
             $galleryFile = $this->getTestImage($name);
-            $page = Page::query()->first();
+            $page = $this->entities->page();
             $badPath = $this->getTestImagePath('gallery', $name);
             $this->deleteImage($badPath);
 
@@ -244,7 +244,7 @@ class ImageTest extends TestCase
         config()->set('filesystems.images', 'local_secure');
         $this->asEditor();
         $galleryFile = $this->getTestImage('my-secure-test-upload.png');
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $expectedPath = storage_path('uploads/images/gallery/' . date('Y-m') . '/my-secure-test-upload.png');
 
         $upload = $this->call('POST', '/images/gallery', ['uploaded_to' => $page->id], [], ['file' => $galleryFile], []);
@@ -292,7 +292,7 @@ class ImageTest extends TestCase
         config()->set('filesystems.images', 'local_secure');
         $this->asEditor();
         $galleryFile = $this->getTestImage('my-secure-test-upload.png');
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $expectedPath = storage_path('uploads/images/gallery/' . date('Y-m') . '/my-secure-test-upload.png');
 
         $upload = $this->call('POST', '/images/gallery', ['uploaded_to' => $page->id], [], ['file' => $galleryFile], []);
@@ -310,7 +310,7 @@ class ImageTest extends TestCase
         }
     }
 
-    public function test_system_images_remain_public()
+    public function test_system_images_remain_public_with_local_secure()
     {
         config()->set('filesystems.images', 'local_secure');
         $this->asAdmin();
@@ -327,13 +327,29 @@ class ImageTest extends TestCase
         }
     }
 
+    public function test_system_images_remain_public_with_local_secure_restricted()
+    {
+        config()->set('filesystems.images', 'local_secure_restricted');
+        $this->asAdmin();
+        $galleryFile = $this->getTestImage('my-system-test-restricted-upload.png');
+        $expectedPath = public_path('uploads/images/system/' . date('Y-m') . '/my-system-test-restricted-upload.png');
+
+        $upload = $this->call('POST', '/settings/customization', [], [], ['app_logo' => $galleryFile], []);
+        $upload->assertRedirect('/settings/customization');
+
+        $this->assertTrue(file_exists($expectedPath), 'Uploaded image not found at path: ' . $expectedPath);
+
+        if (file_exists($expectedPath)) {
+            unlink($expectedPath);
+        }
+    }
+
     public function test_secure_restricted_images_inaccessible_without_relation_permission()
     {
         config()->set('filesystems.images', 'local_secure_restricted');
         $this->asEditor();
         $galleryFile = $this->getTestImage('my-secure-restricted-test-upload.png');
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
 
         $upload = $this->call('POST', '/images/gallery', ['uploaded_to' => $page->id], [], ['file' => $galleryFile], []);
         $upload->assertStatus(200);
@@ -342,7 +358,7 @@ class ImageTest extends TestCase
 
         $this->get($expectedUrl)->assertOk();
 
-        $this->setEntityRestrictions($page, [], []);
+        $this->entities->setPermissions($page, [], []);
 
         $resp = $this->get($expectedUrl);
         $resp->assertNotFound();
@@ -357,8 +373,7 @@ class ImageTest extends TestCase
         config()->set('filesystems.images', 'local_secure_restricted');
         $this->asEditor();
         $galleryFile = $this->getTestImage('my-secure-restricted-thumb-test-test.png');
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
 
         $upload = $this->call('POST', '/images/gallery', ['uploaded_to' => $page->id], [], ['file' => $galleryFile], []);
         $upload->assertStatus(200);
@@ -367,7 +382,7 @@ class ImageTest extends TestCase
 
         $this->get($expectedUrl)->assertOk();
 
-        $this->setEntityRestrictions($page, [], []);
+        $this->entities->setPermissions($page, [], []);
 
         $resp = $this->get($expectedUrl);
         $resp->assertNotFound();
@@ -400,7 +415,7 @@ class ImageTest extends TestCase
         $export = $this->get($pageB->getUrl('/export/html'));
         $this->assertStringContainsString($encodedImageContent, $export->getContent());
 
-        $this->setEntityRestrictions($pageA, [], []);
+        $this->entities->setPermissions($pageA, [], []);
 
         $export = $this->get($pageB->getUrl('/export/html'));
         $this->assertStringNotContainsString($encodedImageContent, $export->getContent());
@@ -412,7 +427,7 @@ class ImageTest extends TestCase
 
     public function test_image_delete()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $this->asAdmin();
         $imageName = 'first-image.png';
         $relPath = $this->getTestImagePath('gallery', $imageName);
@@ -434,7 +449,7 @@ class ImageTest extends TestCase
 
     public function test_image_delete_does_not_delete_similar_images()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $this->asAdmin();
         $imageName = 'first-image.png';
 
@@ -459,7 +474,7 @@ class ImageTest extends TestCase
 
     public function test_image_manager_delete_button_only_shows_with_permission()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $this->asAdmin();
         $imageName = 'first-image.png';
         $relPath = $this->getTestImagePath('gallery', $imageName);
@@ -539,7 +554,7 @@ class ImageTest extends TestCase
 
     public function test_deleted_unused_images()
     {
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $admin = $this->getAdmin();
         $this->actingAs($admin);
 

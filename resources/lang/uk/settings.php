@@ -89,10 +89,10 @@ return [
     'maint_send_test_email_mail_text' => 'Вітаємо! Оскільки ви отримали цього листа, поштова скринька налаштована правильно.',
     'maint_recycle_bin_desc' => 'Видалені полиці, книги, розділи та сторінки попадають кошик, щоб їх можна було відновити або видалити остаточно. Старіші елементи з кошика можна автоматично видаляти через деякий час, залежно від налаштувань системи.',
     'maint_recycle_bin_open' => 'Відкрити кошик',
-    'maint_regen_references' => 'Regenerate References',
-    'maint_regen_references_desc' => 'This action will rebuild the cross-item reference index within the database. This is usually handled automatically but this action can be useful to index old content or content added via unofficial methods.',
-    'maint_regen_references_success' => 'Reference index has been regenerated!',
-    'maint_timeout_command_note' => 'Note: This action can take time to run, which can lead to timeout issues in some web environments. As an alternative, this action be performed using a terminal command.',
+    'maint_regen_references' => 'Перегенерувати посилання',
+    'maint_regen_references_desc' => 'Ця дія перебудує міжелементний посилальний індекс у базі даних. Зазвичай це виконується автоматично, але ця дія може бути корисною для індексування старого вмісту або вмісту, доданого неофіційними методами.',
+    'maint_regen_references_success' => 'Індекс посилань перестворений!',
+    'maint_timeout_command_note' => 'Примітка: Ця дія може зайняти час для запуску, що може призвести до тимчасових проблем в деяких веб-середовищах. Як альтернативу, цю дію виконуються за допомогою термінальної команди.',
 
     // Recycle Bin
     'recycle_bin' => 'Кошик',
@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => 'Ролі',
     'role_user_roles' => 'Ролі користувача',
+    'roles_index_desc' => 'Roles are used to group users & provide system permission to their members. When a user is a member of multiple roles the privileges granted will stack and the user will inherit all abilities.',
+    'roles_x_users_assigned' => '1 user assigned|:count users assigned',
+    'roles_x_permissions_provided' => '1 permission|:count permissions',
+    'roles_assigned_users' => 'Assigned Users',
+    'roles_permissions_provided' => 'Provided Permissions',
     'role_create' => 'Створити нову роль',
     'role_create_success' => 'Роль успішно створена',
     'role_delete' => 'Видалити роль',
@@ -161,7 +166,7 @@ return [
     'roles_system_warning' => 'Майте на увазі, що доступ до будь-якого з вищезазначених трьох дозволів може дозволити користувачеві змінювати власні привілеї або привілеї інших в системі. Ролі з цими дозволами призначайте лише довіреним користувачам.',
     'role_asset_desc' => 'Ці дозволи контролюють стандартні доступи всередині системи. Права на книги, розділи та сторінки перевизначать ці дозволи.',
     'role_asset_admins' => 'Адміністратори автоматично отримують доступ до всього вмісту, але ці параметри можуть відображати або приховувати параметри інтерфейсу користувача.',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => 'Це стосується видимості в менеджері зображень. Фактичний доступ завантажуваних зображень буде залежний від опції зберігання системних зображень.',
     'role_all' => 'Все',
     'role_own' => 'Власне',
     'role_controlled_by_asset' => 'Контролюється за об\'єктом, до якого вони завантажуються',
@@ -172,6 +177,7 @@ return [
 
     // Users
     'users' => 'Користувачі',
+    'users_index_desc' => 'Create & manage individual user accounts within the system. User accounts are used for login and attribution of content & activity. Access permissions are primarily role-based but user content ownership, among other factors, may also affect permissions & access.',
     'user_profile' => 'Профіль користувача',
     'users_add_new' => 'Додати нового користувача',
     'users_search' => 'Пошук користувачів',
@@ -241,6 +247,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Веб-хуки',
+    'webhooks_index_desc' => 'Webhooks are a way to send data to external URLs when certain actions and events occur within the system which allows event-based integration with external platforms such as messaging or notification systems.',
+    'webhooks_x_trigger_events' => '1 trigger event|:count trigger events',
     'webhooks_create' => 'Створити новий Веб-хук',
     'webhooks_none_created' => 'Немає створених Веб-хуків.',
     'webhooks_edit' => 'Редагувати Веб-хук',
@@ -280,6 +288,7 @@ return [
         'da' => 'Dansk',
         'de' => 'Deutsch (Sie)',
         'de_informal' => 'Deutsch (Du)',
+        'el' => 'ελληνικά',
         'es' => 'Español',
         'es_AR' => 'Español Argentina',
         'et' => 'Eesti keel',

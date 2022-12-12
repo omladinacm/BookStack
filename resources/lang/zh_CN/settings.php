@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => '角色',
     'role_user_roles' => '用户角色',
+    'roles_index_desc' => 'Roles are used to group users & provide system permission to their members. When a user is a member of multiple roles the privileges granted will stack and the user will inherit all abilities.',
+    'roles_x_users_assigned' => '1 user assigned|:count users assigned',
+    'roles_x_permissions_provided' => '1 permission|:count permissions',
+    'roles_assigned_users' => 'Assigned Users',
+    'roles_permissions_provided' => 'Provided Permissions',
     'role_create' => '创建角色',
     'role_create_success' => '角色创建成功',
     'role_delete' => '删除角色',
@@ -161,7 +166,7 @@ return [
     'roles_system_warning' => '请注意，拥有以上三个权限中的任何一个都会允许用户更改自己的权限或系统中其他人的权限。 请只将拥有这些权限的角色分配给你信任的用户。',
     'role_asset_desc' => '对系统内资源的默认访问许可将由这些权限控制。单独设置在书籍、章节和页面上的权限将覆盖这里的权限设定。',
     'role_asset_admins' => '管理员可自动获得对所有内容的访问权限，但这些选项可能会显示或隐藏UI选项。',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => '这与图像管理器中的可见性有关。已经上传的图片的实际访问取决于系统图像存储选项。',
     'role_all' => '全部的',
     'role_own' => '拥有的',
     'role_controlled_by_asset' => '由其所在的资源来控制',
@@ -172,6 +177,7 @@ return [
 
     // Users
     'users' => '用户',
+    'users_index_desc' => 'Create & manage individual user accounts within the system. User accounts are used for login and attribution of content & activity. Access permissions are primarily role-based but user content ownership, among other factors, may also affect permissions & access.',
     'user_profile' => '用户资料',
     'users_add_new' => '添加用户',
     'users_search' => '搜索用户',
@@ -241,6 +247,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Webhooks',
+    'webhooks_index_desc' => 'Webhooks are a way to send data to external URLs when certain actions and events occur within the system which allows event-based integration with external platforms such as messaging or notification systems.',
+    'webhooks_x_trigger_events' => '1 trigger event|:count trigger events',
     'webhooks_create' => '新建 Webhook',
     'webhooks_none_created' => '尚未创建任何 Webhook。',
     'webhooks_edit' => '编辑 Webhook',
@@ -280,6 +288,7 @@ return [
         'da' => '丹麦',
         'de' => 'Deutsch (Sie)',
         'de_informal' => 'Deutsch (Du)',
+        'el' => 'ελληνικά',
         'es' => 'Español',
         'es_AR' => 'Español Argentina',
         'et' => 'Eesti keel',

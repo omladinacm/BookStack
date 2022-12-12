@@ -1,13 +1,13 @@
 import {escapeHtml} from "../services/util";
 import {onChildEvent} from "../services/dom";
+import {Component} from "./component";
 
 const ajaxCache = {};
 
 /**
  * AutoSuggest
- * @extends {Component}
  */
-class AutoSuggest {
+export class AutoSuggest extends Component {
     setup() {
         this.parent = this.$el.parentElement;
         this.container = this.$el;
@@ -88,14 +88,12 @@ class AutoSuggest {
         }
 
         const nameFilter = this.getNameFilterIfNeeded();
-        const search = this.input.value.slice(0, 3).toLowerCase();
+        const search = this.input.value.toLowerCase();
         const suggestions = await this.loadSuggestions(search, nameFilter);
-        let toShow = suggestions.slice(0, 6);
-        if (search.length > 0) {
-            toShow = suggestions.filter(val => {
-                return val.toLowerCase().includes(search);
-            }).slice(0, 6);
-        }
+
+        const toShow = suggestions.filter(val => {
+            return search === '' || val.toLowerCase().startsWith(search);
+        }).slice(0, 10);
 
         this.displaySuggestions(toShow);
     }
@@ -111,6 +109,9 @@ class AutoSuggest {
      * @returns {Promise<Object|String|*>}
      */
     async loadSuggestions(search, nameFilter = null) {
+        // Truncate search to prevent over numerous lookups
+        search = search.slice(0, 4);
+
         const params = {search, name: nameFilter};
         const cacheKey = `${this.url}:${JSON.stringify(params)}`;
 
@@ -148,5 +149,3 @@ class AutoSuggest {
         }
     }
 }
-
-export default AutoSuggest;

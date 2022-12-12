@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => 'Roles',
     'role_user_roles' => 'Roles de usuario',
+    'roles_index_desc' => 'Los roles se utilizan para agrupar usuarios y proporcionar permisos del sistema a sus miembros. Cuando un usuario es miembro de múltiples roles los privilegios otorgados se acumularán y el usuario heredará todas las habilidades.',
+    'roles_x_users_assigned' => '1 usuario asignado|:count usuarios asignados',
+    'roles_x_permissions_provided' => '1 permiso|:count permisos',
+    'roles_assigned_users' => 'Usuarios Asignados',
+    'roles_permissions_provided' => 'Permisos Proporcionados',
     'role_create' => 'Crear nuevo rol',
     'role_create_success' => 'Rol creado satisfactoriamente',
     'role_delete' => 'Borrar rol',
@@ -161,7 +166,7 @@ return [
     'roles_system_warning' => 'Tenga en cuenta que el acceso a cualquiera de los tres permisos anteriores puede permitir a un usuario alterar sus propios privilegios o los privilegios de otros en el sistema. Sólo asignar roles con estos permisos a usuarios de confianza.',
     'role_asset_desc' => 'Estos permisos controlan el acceso por defecto a los contenidos del sistema. Los permisos de Libros, Capítulos y Páginas sobreescribiran estos permisos.',
     'role_asset_admins' => 'A los administradores se les asigna automáticamente permisos para acceder a todo el contenido pero estas opciones podrían mostrar u ocultar opciones de la interfaz.',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => 'Esto se refiere a la visibilidad dentro del gestor de imágenes. El acceso a los archivos de imagen subidos dependerá de la opción de almacenamiento de imágenes del sistema.',
     'role_all' => 'Todo',
     'role_own' => 'Propio',
     'role_controlled_by_asset' => 'Controlado por el contenido al que ha sido subido',
@@ -172,6 +177,7 @@ return [
 
     // Users
     'users' => 'Usuarios',
+    'users_index_desc' => 'Crear y administrar cuentas de usuario individuales dentro del sistema. Las cuentas de usuario se utilizan para el inicio de sesión y atribución de contenido y actividad. Los permisos de acceso se basan principalmente en roles, pero la propiedad del contenido del usuario, entre otros factores, también puede afectar a los permisos y el acceso.',
     'user_profile' => 'Perfil de Usuario',
     'users_add_new' => 'Agregar Nuevo Usuario',
     'users_search' => 'Buscar usuarios',
@@ -241,6 +247,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Webhooks',
+    'webhooks_index_desc' => 'Los Webhooks son una forma de enviar datos a URLs externas cuando ciertas acciones y eventos ocurren dentro del sistema, lo que permite la integración basada en eventos con plataformas externas como mensajería o sistemas de notificación.',
+    'webhooks_x_trigger_events' => '1 evento|:count eventos',
     'webhooks_create' => 'Crear Webhook',
     'webhooks_none_created' => 'No hay webhooks creados.',
     'webhooks_edit' => 'Editar Webhook',
@@ -280,6 +288,7 @@ return [
         'da' => 'Danés',
         'de' => 'Alemán (informal)',
         'de_informal' => 'Alemán (formal)',
+        'el' => 'ελληνικά',
         'es' => 'Español',
         'es_AR' => 'Español Argentina',
         'et' => 'Eesti keel',
