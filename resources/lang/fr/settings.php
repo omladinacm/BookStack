@@ -89,10 +89,10 @@ return [
     'maint_send_test_email_mail_text' => 'Félicitations ! Comme vous avez bien reçu cette notification, vos paramètres d\'e-mail semblent être configurés correctement.',
     'maint_recycle_bin_desc' => 'Les étagères, livres, chapitres et pages supprimés sont envoyés dans la corbeille afin qu\'ils puissent être restaurés ou supprimés définitivement. Les éléments plus anciens de la corbeille peuvent être supprimés automatiquement après un certain temps selon la configuration du système.',
     'maint_recycle_bin_open' => 'Ouvrir la corbeille',
-    'maint_regen_references' => 'Regenerate References',
-    'maint_regen_references_desc' => 'This action will rebuild the cross-item reference index within the database. This is usually handled automatically but this action can be useful to index old content or content added via unofficial methods.',
-    'maint_regen_references_success' => 'Reference index has been regenerated!',
-    'maint_timeout_command_note' => 'Note: This action can take time to run, which can lead to timeout issues in some web environments. As an alternative, this action be performed using a terminal command.',
+    'maint_regen_references' => 'Régénérer les références',
+    'maint_regen_references_desc' => 'Cette action reconstruira l\'index des références croisées dans la base de données. Ceci est généralement géré automatiquement, mais cette action peut être utile pour indexer les anciens contenus ou contenus ajoutés par des méthodes non officielles.',
+    'maint_regen_references_success' => 'L\'index de référence a été régénéré !',
+    'maint_timeout_command_note' => 'Note : Cette action peut prendre du temps pour s\'exécuter, ce qui peut conduire à des problèmes d\'expiration dans certains environnements Web. En tant qu\'alternative, cette action est effectuée à l\'aide d\'une commande de terminal.',
 
     // Recycle Bin
     'recycle_bin' => 'Corbeille',
@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => 'Rôles',
     'role_user_roles' => 'Rôles des utilisateurs',
+    'roles_index_desc' => 'Les rôles sont utilisés pour regrouper les utilisateurs et fournir une autorisation système à leurs membres. Lorsqu\'un utilisateur est membre de plusieurs rôles, les privilèges accordés se cumulent et l\'utilisateur hérite de tous les droits d\'accès.',
+    'roles_x_users_assigned' => '1 utilisateur affecté| : nombre d\'affectés',
+    'roles_x_permissions_provided' => '1 permission|:count permissions',
+    'roles_assigned_users' => 'Assigned Users',
+    'roles_permissions_provided' => 'Provided Permissions',
     'role_create' => 'Créer un nouveau rôle',
     'role_create_success' => 'Rôle créé avec succès',
     'role_delete' => 'Supprimer le rôle',
@@ -161,7 +166,7 @@ return [
     'roles_system_warning' => 'Sachez que l\'accès à l\'une des trois permissions ci-dessus peut permettre à un utilisateur de modifier ses propres privilèges ou les privilèges des autres utilisateurs du système. N\'attribuez uniquement des rôles avec ces permissions qu\'à des utilisateurs de confiance.',
     'role_asset_desc' => 'Ces permissions contrôlent l\'accès par défaut des ressources dans le système. Les permissions dans les livres, les chapitres et les pages ignoreront ces permissions',
     'role_asset_admins' => 'Les administrateurs ont automatiquement accès à tous les contenus mais les options suivantes peuvent afficher ou masquer certaines options de l\'interface.',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => 'Cela concerne la visibilité dans le gestionnaire d\'images. L\'accès réel des fichiers d\'image téléchargés dépendra de l\'option de stockage d\'images du système.',
     'role_all' => 'Tous',
     'role_own' => 'Propres',
     'role_controlled_by_asset' => 'Contrôlé par les ressources les ayant envoyés',
@@ -172,6 +177,7 @@ return [
 
     // Users
     'users' => 'Utilisateurs',
+    'users_index_desc' => 'Create & manage individual user accounts within the system. User accounts are used for login and attribution of content & activity. Access permissions are primarily role-based but user content ownership, among other factors, may also affect permissions & access.',
     'user_profile' => 'Profil d\'utilisateur',
     'users_add_new' => 'Ajouter un nouvel utilisateur',
     'users_search' => 'Rechercher les utilisateurs',
@@ -241,6 +247,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Webhooks',
+    'webhooks_index_desc' => 'Webhooks are a way to send data to external URLs when certain actions and events occur within the system which allows event-based integration with external platforms such as messaging or notification systems.',
+    'webhooks_x_trigger_events' => '1 trigger event|:count trigger events',
     'webhooks_create' => 'Créer un nouveau Webhook',
     'webhooks_none_created' => 'Aucun webhook n\'a encore été créé.',
     'webhooks_edit' => 'Éditer le Webhook',
@@ -280,6 +288,7 @@ return [
         'da' => 'Danois',
         'de' => 'Allemand',
         'de_informal' => 'Allemand (informel)',
+        'el' => 'ελληνικά',
         'es' => 'Espagnol',
         'es_AR' => 'Espagnol (Argentine)',
         'et' => 'Estonien',

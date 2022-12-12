@@ -90,9 +90,9 @@ return [
     'maint_recycle_bin_desc' => 'Los estantes, libros, capítulos y páginas eliminados se envían a la papelera de reciclaje para que puedan ser restauradas o eliminadas permanentemente. Los elementos más antiguos en la papelera de reciclaje pueden ser eliminados automáticamente después de un tiempo dependiendo de la configuración del sistema.',
     'maint_recycle_bin_open' => 'Abrir papelera de reciclaje',
     'maint_regen_references' => 'Regenerar Referencias',
-    'maint_regen_references_desc' => 'Esta acción reconstruirá el índice de referencia de elementos cruzados dentro de la base de datos. Normalmente se gestiona automáticamente, pero esta acción puede ser útil para indexar el contenido antiguo o añadido mediante métodos no oficiales.',
-    'maint_regen_references_success' => '¡El índice de referencias ha sido regenerado!',
-    'maint_timeout_command_note' => 'Nota: Esta acción puede tardar en ejecutarse, lo que puede llevar a problemas de tiempo de espera en algunos entornos web. Como alternativa, esta acción se puede realizar desde una terminal.',
+    'maint_regen_references_desc' => 'Esta acción reconstruirá el índice de referencia de elementos cruzados dentro de la base de datos. Normalmente se gestiona automáticamente, pero esta acción puede ser útil para indexar el contenido viejo o añadido mediante métodos no oficiales.',
+    'maint_regen_references_success' => '¡El índice de referencias fue regenerado!',
+    'maint_timeout_command_note' => 'Nota: Esta acción puede tardar en ejecutarse, lo que puede derivar en problemas de tiempo de espera en algunos entornos web. Como alternativa, esta acción se puede realizar usando un comando de terminal.',
 
     // Recycle Bin
     'recycle_bin' => 'Papelera de Reciclaje',
@@ -133,6 +133,11 @@ return [
     // Role Settings
     'roles' => 'Roles',
     'role_user_roles' => 'Roles de usuario',
+    'roles_index_desc' => 'Los roles se utilizan para agrupar usuarios y proporcionar permisos del sistema a sus miembros. Cuando un usuario es miembro de múltiples roles los privilegios otorgados se acumularán y el usuario heredará todas las habilidades.',
+    'roles_x_users_assigned' => '1 usuario assigned|:count usuarios asignados',
+    'roles_x_permissions_provided' => '1 permission|:count permisos',
+    'roles_assigned_users' => 'Usuarios Asignados',
+    'roles_permissions_provided' => 'Permisos Proporcionados',
     'role_create' => 'Crear nuevo rol',
     'role_create_success' => 'Rol creado satisfactoriamente',
     'role_delete' => 'Borrar rol',
@@ -162,7 +167,7 @@ return [
     'roles_system_warning' => 'Tenga en cuenta que el acceso a cualquiera de los tres permisos anteriores puede permitir a un usuario modificar sus propios privilegios o los privilegios de otros usuarios en el sistema. Asignar roles con estos permisos sólo a usuarios de comfianza.',
     'role_asset_desc' => 'Estos permisos controlan el acceso por defecto a los activos del sistema. Permisos definidos en Libros, Capítulos y Páginas ignorarán estos permisos.',
     'role_asset_admins' => 'Los administradores reciben automáticamente acceso a todo el contenido pero estas opciones pueden mostrar u ocultar opciones de UI.',
-    'role_asset_image_view_note' => 'This relates to visibility within the image manager. Actual access of uploaded image files will be dependant upon system image storage option.',
+    'role_asset_image_view_note' => 'Esto se refiere a la visibilidad dentro del gestor de imágenes. El acceso real a los archivos de imágenes subidos, dependerá de la opción de almacenamiento de imágenes del sistema.',
     'role_all' => 'Todo',
     'role_own' => 'Propio',
     'role_controlled_by_asset' => 'Controlado por el activo al que ha sido subido',
@@ -173,6 +178,7 @@ return [
 
     // Users
     'users' => 'Usuarios',
+    'users_index_desc' => 'Crear y administrar cuentas de usuario individuales dentro del sistema. Las cuentas de usuario se utilizan para el inicio de sesión y atribución de contenido y actividad. Los permisos de acceso se basan principalmente en roles, pero la propiedad del contenido del usuario, entre otros factores, también puede afectar a los permisos y el acceso.',
     'user_profile' => 'Perfil de usuario',
     'users_add_new' => 'Agregar nuevo usuario',
     'users_search' => 'Buscar usuarios',
@@ -242,6 +248,8 @@ return [
 
     // Webhooks
     'webhooks' => 'Webhooks',
+    'webhooks_index_desc' => 'Los Webhooks son una forma de enviar datos a URLs externas cuando ciertas acciones y eventos ocurren dentro del sistema, lo que permite la integración basada en eventos con plataformas externas como mensajería o sistemas de notificación.',
+    'webhooks_x_trigger_events' => '1 trigger event|:count evento desencadenante',
     'webhooks_create' => 'Crear nuevo Webhook',
     'webhooks_none_created' => 'No hay webhooks creados.',
     'webhooks_edit' => 'Editar Webhook',
@@ -281,6 +289,7 @@ return [
         'da' => 'Danés',
         'de' => 'Alemán (informal)',
         'de_informal' => 'Alemán (formal)',
+        'el' => 'ελληνικά',
         'es' => 'Español',
         'es_AR' => 'Español Argentina',
         'et' => 'Eesti keel',

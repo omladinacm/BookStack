@@ -88,16 +88,17 @@ class ImageService
     protected function getStorageDiskName(string $imageType): string
     {
         $storageType = config('filesystems.images');
+        $localSecureInUse = ($storageType === 'local_secure' || $storageType === 'local_secure_restricted');
 
         // Ensure system images (App logo) are uploaded to a public space
-        if ($imageType === 'system' && $storageType === 'local_secure') {
-            $storageType = 'local';
+        if ($imageType === 'system' && $localSecureInUse) {
+            return 'local';
         }
 
         // Rename local_secure options to get our image specific storage driver which
         // is scoped to the relevant image directories.
-        if ($storageType === 'local_secure' || $storageType === 'local_secure_restricted') {
-            $storageType = 'local_secure_images';
+        if ($localSecureInUse) {
+            return 'local_secure_images';
         }
 
         return $storageType;
@@ -315,7 +316,7 @@ class ImageService
     {
         try {
             $thumb = $this->imageTool->make($imageData);
-        } catch (ErrorException|NotSupportedException $e) {
+        } catch (ErrorException | NotSupportedException $e) {
             throw new ImageUploadException(trans('errors.cannot_create_thumbs'));
         }
 
