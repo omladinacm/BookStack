@@ -2,8 +2,8 @@
 
 namespace BookStack\Entities\Models;
 
+use BookStack\Auth\Permissions\PermissionApplicator;
 use BookStack\Entities\Tools\PageContent;
-use BookStack\Facades\Permissions;
 use BookStack\Uploads\Attachment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool         $template
  * @property bool         $draft
  * @property int          $revision_count
+ * @property string       $editor
  * @property Chapter      $chapter
  * @property Collection   $attachments
  * @property Collection   $revisions
@@ -38,7 +39,7 @@ class Page extends BookChild
 
     public $textField = 'text';
 
-    protected $hidden = ['html', 'markdown', 'text', 'restricted', 'pivot', 'deleted_at'];
+    protected $hidden = ['html', 'markdown', 'text', 'pivot', 'deleted_at'];
 
     protected $casts = [
         'draft'    => 'boolean',
@@ -50,7 +51,7 @@ class Page extends BookChild
      */
     public function scopeVisible(Builder $query): Builder
     {
-        $query = Permissions::enforceDraftVisibilityOnQuery($query);
+        $query = app()->make(PermissionApplicator::class)->restrictDraftsOnPageQuery($query);
 
         return parent::scopeVisible($query);
     }
@@ -87,8 +88,6 @@ class Page extends BookChild
 
     /**
      * Get the current revision for the page if existing.
-     *
-     * @return PageRevision|null
      */
     public function currentRevision(): HasOne
     {
@@ -143,5 +142,14 @@ class Page extends BookChild
         $refreshed->html = (new PageContent($refreshed))->render();
 
         return $refreshed;
+    }
+
+    /**
+     * Get a visible page by its book and page slugs.
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function getBySlugs(string $bookSlug, string $pageSlug): self
+    {
+        return static::visible()->whereSlugs($bookSlug, $pageSlug)->firstOrFail();
     }
 }

@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Този емейл домейн към момента няма достъп до приложението',
     'register_success' => 'Благодарим Ви за регистрацията! В момента сте регистриран и сте вписани в приложението.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'Proceed with authentication',
+
     // Password Reset
     'reset_password' => 'Нулиране на паролата',
     'reset_password_send_instructions' => 'Въведете емейла си и ще ви бъде изпратен емейл с линк за нулиране на паролата.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Нужно ви е потвърждение чрез емейл, но системата не успя да го изпрати. Моля свържете се с администратора, за да проверите дали вашият емейл адрес е конфигуриран правилно.',
     'email_confirm_success' => 'Имейлът ти е потвърден! Вече би трябвало да можеш да се впишеш с този имейл адрес.',
     'email_confirm_resent' => 'Беше изпратен имейл с потвърждение, Моля, проверете кутията си.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Имейл адресът не е потвърден',
     'email_not_confirmed_text' => 'Вашият емейл адрес все още не е потвърден.',

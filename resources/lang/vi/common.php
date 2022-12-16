@@ -25,6 +25,7 @@ return [
     'actions' => 'Hành động',
     'view' => 'Xem',
     'view_all' => 'Xem tất cả',
+    'new' => 'New',
     'create' => 'Tạo',
     'update' => 'Cập nhật',
     'edit' => 'Sửa',
@@ -45,8 +46,10 @@ return [
     'unfavourite' => 'Bỏ yêu thích',
     'next' => 'Tiếp theo',
     'previous' => 'Trước đó',
-    'filter_active' => 'Active Filter:',
-    'filter_clear' => 'Clear Filter',
+    'filter_active' => 'Bộ lọc có hiệu lực:',
+    'filter_clear' => 'Xóa bộ lọc',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Tùy Chọn Sắp Xếp',
@@ -71,19 +74,21 @@ return [
     'list_view' => 'Hiển thị dạng danh sách',
     'default' => 'Mặc định',
     'breadcrumb' => 'Đường dẫn liên kết',
-    'status' => 'Status',
-    'status_active' => 'Active',
-    'status_inactive' => 'Inactive',
-    'never' => 'Never',
-    'none' => 'None',
+    'status' => 'Trạng thái',
+    'status_active' => 'Hoạt động',
+    'status_inactive' => 'Không hoạt động',
+    'never' => 'Không bao giờ',
+    'none' => 'Không',
 
     // Header
-    'header_menu_expand' => 'Expand Header Menu',
+    'homepage' => 'Homepage',
+    'header_menu_expand' => 'Mở rộng Header Menu',
     'profile_menu' => 'Menu Hồ sơ',
     'view_profile' => 'Xem Hồ sơ',
     'edit_profile' => 'Sửa Hồ sơ',
     'dark_mode' => 'Chế độ Tối',
     'light_mode' => 'Chế độ Sáng',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Thông tin',

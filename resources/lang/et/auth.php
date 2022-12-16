@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Sellel e-posti domeenil ei ole rakendusele ligipääsu',
     'register_success' => 'Aitäh, et registreerusid! Oled nüüd sisse logitud.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Sisselogimiskatse',
+    'auto_init_starting_desc' => 'Sisselogimise protsessi alustamiseks autentimissüsteemiga ühendumine. Kui 5 sekundi jooksul edasiminekut ei ole, proovi alloleval lingil klikkida.',
+    'auto_init_start_link' => 'Jätka autentimisega',
+
     // Password Reset
     'reset_password' => 'Lähtesta parool',
     'reset_password_send_instructions' => 'Siseta oma e-posti aadress ning sulle saadetakse link parooli lähtestamiseks.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'E-posti aadressi kinnitamine on vajalik, aga e-kirja saatmine ebaõnnestus. Võta ühendust administraatoriga.',
     'email_confirm_success' => 'E-posti aadress on kinnitatud! Nüüd saad selle aadressiga sisse logida.',
     'email_confirm_resent' => 'Kinnituskiri on saadetud, vaata oma postkasti.',
+    'email_confirm_thanks' => 'Aitäh, et kinnitasid!',
+    'email_confirm_thanks_desc' => 'Palun oota hetke, kuni kinnitust töödeldakse. Kui sind 3 sekundi jooksul ümber ei suunata, klõpsa jätkamiseks allpool "Jätka" linki.',
 
     'email_not_confirmed' => 'E-posti aadress ei ole kinnitatud',
     'email_not_confirmed_text' => 'Sinu e-posti aadress ei ole veel kinnitatud.',

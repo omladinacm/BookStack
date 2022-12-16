@@ -25,6 +25,7 @@ return [
     'actions' => 'Handlinger',
     'view' => 'Vis',
     'view_all' => 'Vis alle',
+    'new' => 'New',
     'create' => 'Opret',
     'update' => 'Opdater',
     'edit' => 'Rediger',
@@ -45,8 +46,10 @@ return [
     'unfavourite' => 'Fjern som foretrukken',
     'next' => 'Næste',
     'previous' => 'Forrige',
-    'filter_active' => 'Active Filter:',
-    'filter_clear' => 'Clear Filter',
+    'filter_active' => 'Aktivt Filter:',
+    'filter_clear' => 'Nulstil Filter',
+    'download' => 'Hent',
+    'open_in_tab' => 'Åben i ny fane',
 
     // Sort Options
     'sort_options' => 'Sorteringsindstillinger',
@@ -72,18 +75,20 @@ return [
     'default' => 'Standard',
     'breadcrumb' => 'Brødkrumme',
     'status' => 'Status',
-    'status_active' => 'Active',
-    'status_inactive' => 'Inactive',
-    'never' => 'Never',
-    'none' => 'None',
+    'status_active' => 'Aktiv',
+    'status_inactive' => 'Inaktiv',
+    'never' => 'Aldrig',
+    'none' => 'Ingen',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Udvid header menu',
     'profile_menu' => 'Profilmenu',
     'view_profile' => 'Vis profil',
     'edit_profile' => 'Redigér Profil',
     'dark_mode' => 'Mørk tilstand',
     'light_mode' => 'Lys tilstand',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Info',

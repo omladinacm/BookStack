@@ -9,7 +9,7 @@ return [
     'confirm' => 'Bestätigen',
     'back' => 'Zurück',
     'save' => 'Speichern',
-    'continue' => 'Weiter',
+    'continue' => 'Fortfahren',
     'select' => 'Auswählen',
     'toggle_all' => 'Alle umschalten',
     'more' => 'Mehr',
@@ -25,7 +25,8 @@ return [
     'actions' => 'Aktionen',
     'view' => 'Anzeigen',
     'view_all' => 'Alle anzeigen',
-    'create' => 'Anlegen',
+    'new' => 'New',
+    'create' => 'Erstellen',
     'update' => 'Aktualisieren',
     'edit' => 'Bearbeiten',
     'sort' => 'Sortieren',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Vorheriges',
     'filter_active' => 'Gesetzte Filter:',
     'filter_clear' => 'Filter löschen',
+    'download' => 'Herunterladen',
+    'open_in_tab' => 'In neuem Tab öffnen',
 
     // Sort Options
     'sort_options' => 'Sortieroptionen',
@@ -78,12 +81,14 @@ return [
     'none' => 'Nichts',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Header-Menü erweitern',
     'profile_menu' => 'Profilmenü',
     'view_profile' => 'Profil ansehen',
     'edit_profile' => 'Profil bearbeiten',
     'dark_mode' => 'Dunkler Modus',
     'light_mode' => 'Heller Modus',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Info',

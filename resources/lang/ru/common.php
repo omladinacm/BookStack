@@ -25,6 +25,7 @@ return [
     'actions' => 'Действия',
     'view' => 'Просмотр',
     'view_all' => 'Показать все',
+    'new' => 'Новый',
     'create' => 'Создание',
     'update' => 'Обновление',
     'edit' => 'Редактировать',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Предыдущая',
     'filter_active' => 'Активный фильтр:',
     'filter_clear' => 'Сбросить фильтр',
+    'download' => 'Загрузить',
+    'open_in_tab' => 'Открыть во вкладке',
 
     // Sort Options
     'sort_options' => 'Параметры сортировки',
@@ -78,12 +81,14 @@ return [
     'none' => 'Нет',
 
     // Header
+    'homepage' => 'Главная страница',
     'header_menu_expand' => 'Развернуть меню заголовка',
     'profile_menu' => 'Меню профиля',
     'view_profile' => 'Посмотреть профиль',
     'edit_profile' => 'Редактировать профиль',
     'dark_mode' => 'Темный режим',
     'light_mode' => 'Светлый режим',
+    'global_search' => 'Глобальный поиск',
 
     // Layout tabs
     'tab_info' => 'Информация',

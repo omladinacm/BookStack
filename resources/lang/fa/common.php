@@ -25,6 +25,7 @@ return [
     'actions' => 'عملیات',
     'view' => 'نمایش',
     'view_all' => 'نمایش همه',
+    'new' => 'New',
     'create' => 'ایجاد',
     'update' => 'به‌روز رسانی',
     'edit' => 'ويرايش',
@@ -42,11 +43,13 @@ return [
     'configure' => 'پیکربندی کنید',
     'fullscreen' => 'تمام صفحه',
     'favourite' => 'علاقه‌مندی',
-    'unfavourite' => 'Unfavourite',
+    'unfavourite' => 'حذف از علاقه‌مندی',
     'next' => 'بعدی',
     'previous' => 'قبلى',
     'filter_active' => 'فیلتر فعال:',
     'filter_clear' => 'پاک کردن فیلتر',
+    'download' => 'دانلود',
+    'open_in_tab' => 'باز کردن در تب جدید',
 
     // Sort Options
     'sort_options' => 'گزینه‌های مرتب سازی',
@@ -54,7 +57,7 @@ return [
     'sort_ascending' => 'مرتب‌سازی صعودی',
     'sort_descending' => 'مرتب‌سازی نزولی',
     'sort_name' => 'نام',
-    'sort_default' => 'پیش‎فرض',
+    'sort_default' => 'پیش‌فرض',
     'sort_created_at' => 'تاریخ ایجاد',
     'sort_updated_at' => 'تاریخ بروزرسانی',
 
@@ -69,21 +72,23 @@ return [
     'details' => 'جزییات',
     'grid_view' => 'نمایش شبکه‌ای',
     'list_view' => 'نمای لیست',
-    'default' => 'پیش‎فرض',
+    'default' => 'پیش‌فرض',
     'breadcrumb' => 'مسیر جاری',
     'status' => 'وضعیت',
     'status_active' => 'فعال',
     'status_inactive' => 'غیر فعال',
     'never' => 'هرگز',
-    'none' => 'None',
+    'none' => 'هیچکدام',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'گسترش منو',
     'profile_menu' => 'منو پروفایل',
     'view_profile' => 'مشاهده پروفایل',
     'edit_profile' => 'ویرایش پروفایل',
     'dark_mode' => 'حالت تاریک',
     'light_mode' => 'حالت روشن',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'اطلاعات',

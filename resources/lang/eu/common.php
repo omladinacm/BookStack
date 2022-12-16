@@ -25,6 +25,7 @@ return [
     'actions' => 'Ekintzak',
     'view' => 'Ikusi',
     'view_all' => 'Ikusi denak',
+    'new' => 'New',
     'create' => 'Sortu',
     'update' => 'Eguneratu',
     'edit' => 'Editatu',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Aurrekoa',
     'filter_active' => 'Iragazki aktiboa:',
     'filter_clear' => 'Iragazkia garbitu',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Ordenatzeko aukerak',
@@ -78,12 +81,14 @@ return [
     'none' => 'Bat ere ez',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Zabaldu goiburuko menua',
     'profile_menu' => 'Perfileko menua',
     'view_profile' => 'Ikusi profila',
     'edit_profile' => 'Editatu profila',
     'dark_mode' => 'Modu iluna',
     'light_mode' => 'Modu argia',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Info',

@@ -3,12 +3,13 @@
 namespace Tests\Auth;
 
 use BookStack\Actions\ActivityType;
+use BookStack\Auth\Role;
 use BookStack\Auth\User;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Testing\TestResponse;
 use Tests\Helpers\OidcJwtHelper;
 use Tests\TestCase;
-use Tests\TestResponse;
 
 class OidcTest extends TestCase
 {
@@ -37,6 +38,10 @@ class OidcTest extends TestCase
             'oidc.token_endpoint'         => 'https://oidc.local/token',
             'oidc.discover'               => false,
             'oidc.dump_user_details'      => false,
+            'oidc.additional_scopes'      => '',
+            'oidc.user_to_groups'         => false,
+            'oidc.groups_claim'           => 'group',
+            'oidc.remove_from_groups'     => false,
         ]);
     }
 
@@ -52,7 +57,7 @@ class OidcTest extends TestCase
     {
         $req = $this->get('/login');
         $req->assertSeeText('SingleSignOn-Testing');
-        $req->assertElementExists('form[action$="/oidc/login"][method=POST] button');
+        $this->withHtml($req)->assertElementExists('form[action$="/oidc/login"][method=POST] button');
     }
 
     public function test_oidc_routes_are_only_active_if_oidc_enabled()
@@ -157,6 +162,17 @@ class OidcTest extends TestCase
 
         $user = User::query()->where('email', '=', 'benny@example.com')->first();
         $this->assertActivityExists(ActivityType::AUTH_LOGIN, null, "oidc; ({$user->id}) Barry Scott");
+    }
+
+    public function test_login_uses_custom_additional_scopes_if_defined()
+    {
+        config()->set([
+            'oidc.additional_scopes' => 'groups, badgers',
+        ]);
+
+        $redirect = $this->post('/oidc/login')->headers->get('location');
+
+        $this->assertStringContainsString('scope=openid%20profile%20email%20groups%20badgers', $redirect);
     }
 
     public function test_callback_fails_if_no_state_present_or_matching()
@@ -342,6 +358,90 @@ class OidcTest extends TestCase
         $this->assertFalse(auth()->check());
         $this->runLogin();
         $this->assertTrue(auth()->check());
+    }
+
+    public function test_auth_login_with_autodiscovery_with_keys_that_do_not_have_use_property()
+    {
+        // Based on reading the OIDC discovery spec:
+        // > This contains the signing key(s) the RP uses to validate signatures from the OP. The JWK Set MAY also
+        // > contain the Server's encryption key(s), which are used by RPs to encrypt requests to the Server. When
+        // > both signing and encryption keys are made available, a use (Key Use) parameter value is REQUIRED for all
+        // > keys in the referenced JWK Set to indicate each key's intended usage.
+        // We can assume that keys without use are intended for signing.
+        $this->withAutodiscovery();
+
+        $keyArray = OidcJwtHelper::publicJwkKeyArray();
+        unset($keyArray['use']);
+
+        $this->mockHttpClient([
+            $this->getAutoDiscoveryResponse(),
+            new Response(200, [
+                'Content-Type'  => 'application/json',
+                'Cache-Control' => 'no-cache, no-store',
+                'Pragma'        => 'no-cache',
+            ], json_encode([
+                'keys' => [
+                    $keyArray,
+                ],
+            ])),
+        ]);
+
+        $this->assertFalse(auth()->check());
+        $this->runLogin();
+        $this->assertTrue(auth()->check());
+    }
+
+    public function test_login_group_sync()
+    {
+        config()->set([
+            'oidc.user_to_groups'     => true,
+            'oidc.groups_claim'       => 'groups',
+            'oidc.remove_from_groups' => false,
+        ]);
+        $roleA = Role::factory()->create(['display_name' => 'Wizards']);
+        $roleB = Role::factory()->create(['display_name' => 'ZooFolks', 'external_auth_id' => 'zookeepers']);
+        $roleC = Role::factory()->create(['display_name' => 'Another Role']);
+
+        $resp = $this->runLogin([
+            'email'  => 'benny@example.com',
+            'sub'    => 'benny1010101',
+            'groups' => ['Wizards', 'Zookeepers'],
+        ]);
+        $resp->assertRedirect('/');
+
+        /** @var User $user */
+        $user = User::query()->where('email', '=', 'benny@example.com')->first();
+
+        $this->assertTrue($user->hasRole($roleA->id));
+        $this->assertTrue($user->hasRole($roleB->id));
+        $this->assertFalse($user->hasRole($roleC->id));
+    }
+
+    public function test_login_group_sync_with_nested_groups_in_token()
+    {
+        config()->set([
+            'oidc.user_to_groups'     => true,
+            'oidc.groups_claim'       => 'my.custom.groups.attr',
+            'oidc.remove_from_groups' => false,
+        ]);
+        $roleA = Role::factory()->create(['display_name' => 'Wizards']);
+
+        $resp = $this->runLogin([
+            'email'  => 'benny@example.com',
+            'sub'    => 'benny1010101',
+            'my'     => [
+                'custom' => [
+                    'groups' => [
+                        'attr' => ['Wizards'],
+                    ],
+                ],
+            ],
+        ]);
+        $resp->assertRedirect('/');
+
+        /** @var User $user */
+        $user = User::query()->where('email', '=', 'benny@example.com')->first();
+        $this->assertTrue($user->hasRole($roleA->id));
     }
 
     protected function withAutodiscovery()

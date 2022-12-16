@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Dit e-maildomein is niet toegestaan',
     'register_success' => 'Bedankt voor het aanmelden! Je bent nu geregistreerd en aangemeld.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Poging tot inloggen',
+    'auto_init_starting_desc' => 'We maken contact met uw authenticatiesysteem om het inlogproces te starten. Als er na 5 seconden geen vooruitgang is, kunt u proberen op de onderstaande link te klikken.',
+    'auto_init_start_link' => 'Ga verder met authenticatie',
+
     // Password Reset
     'reset_password' => 'Wachtwoord herstellen',
     'reset_password_send_instructions' => 'Geef je e-mail en we sturen je een link om je wachtwoord te herstellen',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'E-mail bevestiging is vereisd maar het systeem kon geen mail verzenden. Neem contact op met de beheerder.',
     'email_confirm_success' => 'Uw e-mailadres is bevestigd! U zou nu moeten kunnen inloggen met dit e-mailadres.',
     'email_confirm_resent' => 'De bevestigingse-mails is opnieuw verzonden. Controleer je inbox.',
+    'email_confirm_thanks' => 'Bedankt voor de bevestiging!',
+    'email_confirm_thanks_desc' => 'Wacht even terwijl uw bevestiging wordt behandeld. Als u na 3 seconden niet wordt doorverwezen, drukt u op de onderstaande link "Doorgaan" om verder te gaan.',
 
     'email_not_confirmed' => 'E-mailadres nog niet bevestigd',
     'email_not_confirmed_text' => 'Je e-mailadres is nog niet bevestigd.',

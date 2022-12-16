@@ -19,12 +19,13 @@ return [
     'description' => 'Descrição',
     'role' => 'Cargo',
     'cover_image' => 'Imagem de capa',
-    'cover_image_description' => 'Esta imagem deve ser aproximadamente 440x250px.',
+    'cover_image_description' => 'Esta imagem deve ter aproximadamente 440x250px.',
 
     // Actions
     'actions' => 'Ações',
     'view' => 'Visualizar',
     'view_all' => 'Visualizar Todos',
+    'new' => 'Novo',
     'create' => 'Criar',
     'update' => 'Atualizar',
     'edit' => 'Editar',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Anterior',
     'filter_active' => 'Filtro Ativo:',
     'filter_clear' => 'Limpar Filtro',
+    'download' => 'Transferir',
+    'open_in_tab' => 'Abrir em novo separador',
 
     // Sort Options
     'sort_options' => 'Opções de Ordenação',
@@ -78,12 +81,14 @@ return [
     'none' => 'Nenhum',
 
     // Header
+    'homepage' => 'Página inicial',
     'header_menu_expand' => 'Expandir Menu de Cabeçalho',
     'profile_menu' => 'Menu de Perfil',
     'view_profile' => 'Visualizar Perfil',
     'edit_profile' => 'Editar Perfil',
     'dark_mode' => 'Modo Escuro',
     'light_mode' => 'Modo Claro',
+    'global_search' => 'Pesquisa global',
 
     // Layout tabs
     'tab_info' => 'Informações',

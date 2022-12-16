@@ -1,42 +1,46 @@
-/**
- * Entity Selector Popup
- * @extends {Component}
- */
-class EntitySelectorPopup {
+import {Component} from "./component";
+
+export class EntitySelectorPopup extends Component {
 
     setup() {
-        this.elem = this.$el;
+        this.container = this.$el;
         this.selectButton = this.$refs.select;
-        this.searchInput = this.$refs.searchInput;
-
-        window.EntitySelectorPopup = this;
+        this.selectorEl = this.$refs.selector;
 
         this.callback = null;
         this.selection = null;
 
         this.selectButton.addEventListener('click', this.onSelectButtonClick.bind(this));
         window.$events.listen('entity-select-change', this.onSelectionChange.bind(this));
-        window.$events.listen('entity-select-confirm', this.onSelectionConfirm.bind(this));
+        window.$events.listen('entity-select-confirm', this.handleConfirmedSelection.bind(this));
     }
 
     show(callback) {
         this.callback = callback;
-        this.elem.components.popup.show();
-        this.searchInput.focus();
+        this.getPopup().show();
+        this.getSelector().focusSearch();
     }
 
     hide() {
-        this.elem.components.popup.hide();
+        this.getPopup().hide();
+    }
+
+    /**
+     * @returns {Popup}
+     */
+    getPopup() {
+        return window.$components.firstOnElement(this.container, 'popup');
+    }
+
+    /**
+     * @returns {EntitySelector}
+     */
+    getSelector() {
+        return window.$components.firstOnElement(this.selectorEl, 'entity-selector');
     }
 
     onSelectButtonClick() {
-        this.hide();
-        if (this.selection !== null && this.callback) this.callback(this.selection);
-    }
-
-    onSelectionConfirm(entity) {
-        this.hide();
-        if (this.callback && entity) this.callback(entity);
+        this.handleConfirmedSelection(this.selection);
     }
 
     onSelectionChange(entity) {
@@ -47,6 +51,10 @@ class EntitySelectorPopup {
             this.selectButton.removeAttribute('disabled');
         }
     }
-}
 
-export default EntitySelectorPopup;
+    handleConfirmedSelection(entity) {
+        this.hide();
+        this.getSelector().reset();
+        if (this.callback && entity) this.callback(entity);
+    }
+}

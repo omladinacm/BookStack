@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'このEmailドメインでの登録は許可されていません。',
     'register_success' => '登録が完了し、ログインできるようになりました！',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'ログイン試行中',
+    'auto_init_starting_desc' => 'ログイン プロセスを開始するために、認証システムに接続しています。5秒経過しても進行しない場合、下のリンクをクリックしてみてください。',
+    'auto_init_start_link' => '認証を進める',
+
     // Password Reset
     'reset_password' => 'パスワードリセット',
     'reset_password_send_instructions' => '以下にEメールアドレスを入力すると、パスワードリセットリンクが記載されたメールが送信されます。',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Eメールの確認が必要でしたが、システム上でEメールの送信ができませんでした。管理者に連絡し、Eメールが正しく設定されていることを確認してください。',
     'email_confirm_success' => 'メールアドレスが確認されました！このメールアドレスでログインできるようになりました。',
     'email_confirm_resent' => '確認メールを再送信しました。受信トレイを確認してください。',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Eメールアドレスが確認できていません',
     'email_not_confirmed_text' => 'Eメールアドレスの確認が完了していません。',

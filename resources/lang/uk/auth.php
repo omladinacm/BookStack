@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Цей домен електронної пошти заборонений для реєстрації',
     'register_success' => 'Дякуємо за реєстрацію! Ви зареєстровані та ввійшли в систему.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Спроба входу в систему',
+    'auto_init_starting_desc' => 'Ми пишемо вашій системі аутентифікації, щоб запустити процес авторизації. Якщо після 5 секунд Ви можете спробувати натиснути на посилання нижче.',
+    'auto_init_start_link' => 'Продовжити з автентифікацією',
+
     // Password Reset
     'reset_password' => 'Скинути пароль',
     'reset_password_send_instructions' => 'Введіть адресу електронної пошти нижче, і вам буде надіслано електронне повідомлення з посиланням на зміну пароля.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Необхідно підтвердження електронною поштою, але система не змогла надіслати електронний лист. Зверніться до адміністратора, щоб правильно налаштувати електронну пошту.',
     'email_confirm_success' => 'Ваша адреса електронної пошти була підтверджена! Тепер ви можете увійти в систему, використовуючи цю адресу електронної пошти.',
     'email_confirm_resent' => 'Лист з підтвердженням надіслано, перевірте свою пошту.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Адресу електронної скриньки не підтверджено',
     'email_not_confirmed_text' => 'Ваша електронна адреса ще не підтверджена.',

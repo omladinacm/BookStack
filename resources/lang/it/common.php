@@ -25,6 +25,7 @@ return [
     'actions' => 'Azioni',
     'view' => 'Visualizza',
     'view_all' => 'Vedi tutto',
+    'new' => 'Nuovo',
     'create' => 'Crea',
     'update' => 'Aggiorna',
     'edit' => 'Modifica',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Precedente',
     'filter_active' => 'Filtro attivo:',
     'filter_clear' => 'Pulisci filtro',
+    'download' => 'Download',
+    'open_in_tab' => 'Apri nella scheda',
 
     // Sort Options
     'sort_options' => 'Opzioni Ordinamento',
@@ -78,12 +81,14 @@ return [
     'none' => 'Nessuno',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Espandi Menù Intestazione',
     'profile_menu' => 'Menù del profilo',
     'view_profile' => 'Visualizza Profilo',
     'edit_profile' => 'Modifica Profilo',
     'dark_mode' => 'Modalità Scura',
     'light_mode' => 'Modalità Chiara',
+    'global_search' => 'Ricerca Globale',
 
     // Layout tabs
     'tab_info' => 'Info',

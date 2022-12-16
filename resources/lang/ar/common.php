@@ -25,6 +25,7 @@ return [
     'actions' => 'إجراءات',
     'view' => 'عرض',
     'view_all' => 'عرض الكل',
+    'new' => 'New',
     'create' => 'إنشاء',
     'update' => 'تحديث',
     'edit' => 'تعديل',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Previous',
     'filter_active' => 'Active Filter:',
     'filter_clear' => 'Clear Filter',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'خيارات الفرز',
@@ -78,12 +81,14 @@ return [
     'none' => 'None',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'عرض القائمة',
     'profile_menu' => 'قائمة ملف التعريف',
     'view_profile' => 'عرض الملف الشخصي',
     'edit_profile' => 'تعديل الملف الشخصي',
     'dark_mode' => 'الوضع المظلم',
     'light_mode' => 'الوضع المضيء',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'معلومات',

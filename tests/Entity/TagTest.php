@@ -3,7 +3,6 @@
 namespace Tests\Entity;
 
 use BookStack\Actions\Tag;
-use BookStack\Entities\Models\Book;
 use BookStack\Entities\Models\Entity;
 use BookStack\Entities\Models\Page;
 use Tests\TestCase;
@@ -76,9 +75,7 @@ class TagTest extends TestCase
         $this->asEditor()->get('/ajax/tags/suggest/names?search=co')->assertSimilarJson(['color', 'country']);
 
         // Set restricted permission the page
-        $page->restricted = true;
-        $page->save();
-        $page->rebuildPermissions();
+        $this->entities->setPermissions($page, [], []);
 
         $this->asAdmin()->get('/ajax/tags/suggest/names?search=co')->assertSimilarJson(['color', 'country']);
         $this->asEditor()->get('/ajax/tags/suggest/names?search=co')->assertSimilarJson([]);
@@ -94,73 +91,69 @@ class TagTest extends TestCase
         $page = $this->getEntityWithTags(Page::class, $tags);
         $resp = $this->asEditor()->get('/search?term=[category]');
         $resp->assertSee($page->name);
-        $resp->assertElementContains('[href="' . $page->getUrl() . '"]', 'category');
-        $resp->assertElementContains('[href="' . $page->getUrl() . '"]', 'buckets');
-        $resp->assertElementContains('[href="' . $page->getUrl() . '"]', 'color');
-        $resp->assertElementContains('[href="' . $page->getUrl() . '"]', 'red');
+        $this->withHtml($resp)->assertElementContains('[href="' . $page->getUrl() . '"]', 'category');
+        $this->withHtml($resp)->assertElementContains('[href="' . $page->getUrl() . '"]', 'buckets');
+        $this->withHtml($resp)->assertElementContains('[href="' . $page->getUrl() . '"]', 'color');
+        $this->withHtml($resp)->assertElementContains('[href="' . $page->getUrl() . '"]', 'red');
     }
 
     public function test_tags_index_shows_tag_name_as_expected_with_right_counts()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $page->tags()->create(['name' => 'Category', 'value' => 'GreatTestContent']);
         $page->tags()->create(['name' => 'Category', 'value' => 'OtherTestContent']);
 
         $resp = $this->asEditor()->get('/tags');
         $resp->assertSee('Category');
-        $resp->assertElementCount('.tag-item', 1);
+        $html = $this->withHtml($resp);
+        $html->assertElementCount('.tag-item', 1);
         $resp->assertDontSee('GreatTestContent');
         $resp->assertDontSee('OtherTestContent');
-        $resp->assertElementContains('a[title="Total tag usages"]', '2');
-        $resp->assertElementContains('a[title="Assigned to Pages"]', '2');
-        $resp->assertElementContains('a[title="Assigned to Books"]', '0');
-        $resp->assertElementContains('a[title="Assigned to Chapters"]', '0');
-        $resp->assertElementContains('a[title="Assigned to Shelves"]', '0');
-        $resp->assertElementContains('a[href$="/tags?name=Category"]', '2 unique values');
+        $html->assertElementContains('a[title="Total tag usages"]', '2');
+        $html->assertElementContains('a[title="Assigned to Pages"]', '2');
+        $html->assertElementContains('a[title="Assigned to Books"]', '0');
+        $html->assertElementContains('a[title="Assigned to Chapters"]', '0');
+        $html->assertElementContains('a[title="Assigned to Shelves"]', '0');
+        $html->assertElementContains('a[href$="/tags?name=Category"]', '2 unique values');
 
-        /** @var Book $book */
-        $book = Book::query()->first();
+        $book = $this->entities->book();
         $book->tags()->create(['name' => 'Category', 'value' => 'GreatTestContent']);
         $resp = $this->asEditor()->get('/tags');
-        $resp->assertElementContains('a[title="Total tag usages"]', '3');
-        $resp->assertElementContains('a[title="Assigned to Books"]', '1');
-        $resp->assertElementContains('a[href$="/tags?name=Category"]', '2 unique values');
+        $this->withHtml($resp)->assertElementContains('a[title="Total tag usages"]', '3');
+        $this->withHtml($resp)->assertElementContains('a[title="Assigned to Books"]', '1');
+        $this->withHtml($resp)->assertElementContains('a[href$="/tags?name=Category"]', '2 unique values');
     }
 
     public function test_tag_index_can_be_searched()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $page->tags()->create(['name' => 'Category', 'value' => 'GreatTestContent']);
 
         $resp = $this->asEditor()->get('/tags?search=cat');
-        $resp->assertElementContains('.tag-item .tag-name', 'Category');
+        $this->withHtml($resp)->assertElementContains('.tag-item .tag-name', 'Category');
 
         $resp = $this->asEditor()->get('/tags?search=content');
-        $resp->assertElementContains('.tag-item .tag-name', 'Category');
-        $resp->assertElementContains('.tag-item .tag-value', 'GreatTestContent');
+        $this->withHtml($resp)->assertElementContains('.tag-item .tag-name', 'Category');
+        $this->withHtml($resp)->assertElementContains('.tag-item .tag-value', 'GreatTestContent');
 
         $resp = $this->asEditor()->get('/tags?search=other');
-        $resp->assertElementNotExists('.tag-item .tag-name');
+        $this->withHtml($resp)->assertElementNotExists('.tag-item .tag-name');
     }
 
     public function test_tag_index_search_will_show_mulitple_values_of_a_single_tag_name()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $page->tags()->create(['name' => 'Animal', 'value' => 'Catfish']);
         $page->tags()->create(['name' => 'Animal', 'value' => 'Catdog']);
 
         $resp = $this->asEditor()->get('/tags?search=cat');
-        $resp->assertElementContains('.tag-item .tag-value', 'Catfish');
-        $resp->assertElementContains('.tag-item .tag-value', 'Catdog');
+        $this->withHtml($resp)->assertElementContains('.tag-item .tag-value', 'Catfish');
+        $this->withHtml($resp)->assertElementContains('.tag-item .tag-value', 'Catdog');
     }
 
     public function test_tag_index_can_be_scoped_to_specific_tag_name()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $page->tags()->create(['name' => 'Category', 'value' => 'GreatTestContent']);
         $page->tags()->create(['name' => 'Category', 'value' => 'OtherTestContent']);
         $page->tags()->create(['name' => 'OtherTagName', 'value' => 'OtherValue']);
@@ -170,15 +163,14 @@ class TagTest extends TestCase
         $resp->assertSee('GreatTestContent');
         $resp->assertSee('OtherTestContent');
         $resp->assertDontSee('OtherTagName');
-        $resp->assertElementCount('table .tag-item', 2);
         $resp->assertSee('Active Filter:');
-        $resp->assertElementContains('form[action$="/tags"]', 'Clear Filter');
+        $this->withHtml($resp)->assertElementCount('.item-list .tag-item', 2);
+        $this->withHtml($resp)->assertElementContains('form[action$="/tags"]', 'Clear Filter');
     }
 
     public function test_tags_index_adheres_to_page_permissions()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $page->tags()->create(['name' => 'SuperCategory', 'value' => 'GreatTestContent']);
 
         $resp = $this->asEditor()->get('/tags');
@@ -186,8 +178,7 @@ class TagTest extends TestCase
         $resp = $this->get('/tags?name=SuperCategory');
         $resp->assertSee('GreatTestContent');
 
-        $page->restricted = true;
-        $this->regenEntityPermissions($page);
+        $this->entities->setPermissions($page, [], []);
 
         $resp = $this->asEditor()->get('/tags');
         $resp->assertDontSee('SuperCategory');
@@ -197,9 +188,28 @@ class TagTest extends TestCase
 
     public function test_tag_index_shows_message_on_no_results()
     {
-        /** @var Page $page */
         $resp = $this->asEditor()->get('/tags?search=testingval');
         $resp->assertSee('No items available');
         $resp->assertSee('Tags can be assigned via the page editor sidebar');
+    }
+
+    public function test_tag_classes_visible_on_entities()
+    {
+        $this->asEditor();
+
+        foreach ($this->entities->all() as $entity) {
+            $entity->tags()->create(['name' => 'My Super Tag Name', 'value' => 'An-awesome-value']);
+            $html = $this->withHtml($this->get($entity->getUrl()));
+            $html->assertElementExists('body.tag-name-mysupertagname.tag-value-anawesomevalue.tag-pair-mysupertagname-anawesomevalue');
+        }
+    }
+
+    public function test_tag_classes_are_escaped()
+    {
+        $page = $this->entities->page();
+        $page->tags()->create(['name' => '<>']);
+        $resp = $this->asEditor()->get($page->getUrl());
+        $resp->assertDontSee('tag-name-<>', false);
+        $resp->assertSee('tag-name-&lt;&gt;', false);
     }
 }

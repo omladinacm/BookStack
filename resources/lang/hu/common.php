@@ -25,6 +25,7 @@ return [
     'actions' => 'Műveletek',
     'view' => 'Megtekintés',
     'view_all' => 'Összes megtekintése',
+    'new' => 'New',
     'create' => 'Létrehozás',
     'update' => 'Frissítés',
     'edit' => 'Szerkesztés',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Előző',
     'filter_active' => 'Aktív szűrő:',
     'filter_clear' => 'Szűrő törlése',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Rendezési beállítások',
@@ -78,12 +81,14 @@ return [
     'none' => 'Egyik sem',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Expand Header Menu',
     'profile_menu' => 'Profil menü',
     'view_profile' => 'Profil megtekintése',
     'edit_profile' => 'Profil szerkesztése',
     'dark_mode' => 'Sötét mód',
     'light_mode' => 'Világos mód',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Információ',

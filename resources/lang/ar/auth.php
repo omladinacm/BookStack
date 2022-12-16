@@ -21,7 +21,7 @@ return [
     'email' => 'البريد الإلكتروني',
     'password' => 'كلمة المرور',
     'password_confirm' => 'تأكيد كلمة المرور',
-    'password_hint' => 'Must be at least 8 characters',
+    'password_hint' => 'يجب أن تحتوي كلمة المرور على 8 خانات على الأقل',
     'forgot_password' => 'نسيت كلمة المرور؟',
     'remember_me' => 'تذكرني',
     'ldap_email_hint' => 'الرجاء إدخال عنوان بريد إلكتروني لاستخدامه مع الحساب.',
@@ -37,6 +37,11 @@ return [
     'registrations_disabled' => 'التسجيل مغلق حالياً',
     'registration_email_domain_invalid' => 'المجال الخاص بالبريد الإلكتروني لا يملك حق الوصول لهذا التطبيق',
     'register_success' => 'شكراً لإنشاء حسابكم! تم تسجيلكم ودخولكم للحساب الخاص بكم.',
+
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'المتابعة مع المصادقة',
 
     // Password Reset
     'reset_password' => 'استعادة كلمة المرور',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'تأكيد البريد الإلكتروني مطلوب ولكن النظام لم يستطع إرسال الرسالة. تواصل مع مشرف النظام للتأكد من إعدادات البريد.',
     'email_confirm_success' => 'Your email has been confirmed! You should now be able to login using this email address.',
     'email_confirm_resent' => 'تمت إعادة إرسال رسالة التأكيد. الرجاء مراجعة صندوق الوارد',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'لم يتم تأكيد البريد الإلكتروني',
     'email_not_confirmed_text' => 'لم يتم بعد تأكيد عنوان البريد الإلكتروني.',
@@ -81,7 +88,7 @@ return [
     'mfa_setup_remove_confirmation' => 'Are you sure you want to remove this multi-factor authentication method?',
     'mfa_setup_action' => 'إعداد (تنصيب)',
     'mfa_backup_codes_usage_limit_warning' => 'You have less than 5 backup codes remaining, Please generate and store a new set before you run out of codes to prevent being locked out of your account.',
-    'mfa_option_totp_title' => 'Mobile App',
+    'mfa_option_totp_title' => 'تطبيق الجوال',
     'mfa_option_totp_desc' => 'To use multi-factor authentication you\'ll need a mobile application that supports TOTP such as Google Authenticator, Authy or Microsoft Authenticator.',
     'mfa_option_backup_codes_title' => 'Backup Codes',
     'mfa_option_backup_codes_desc' => 'Securely store a set of one-time-use backup codes which you can enter to verify your identity.',

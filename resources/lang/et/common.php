@@ -25,6 +25,7 @@ return [
     'actions' => 'Tegevused',
     'view' => 'Vaata',
     'view_all' => 'Vaata kõiki',
+    'new' => 'Uus',
     'create' => 'Lisa',
     'update' => 'Uuenda',
     'edit' => 'Muuda',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Eelmine',
     'filter_active' => 'Aktiivne filter:',
     'filter_clear' => 'Tühjenda filter',
+    'download' => 'Laadi alla',
+    'open_in_tab' => 'Ava vahelehel',
 
     // Sort Options
     'sort_options' => 'Sorteerimise valikud',
@@ -78,12 +81,14 @@ return [
     'none' => 'Puudub',
 
     // Header
+    'homepage' => 'Avaleht',
     'header_menu_expand' => 'Laienda päisemenüü',
     'profile_menu' => 'Profiilimenüü',
     'view_profile' => 'Vaata profiili',
     'edit_profile' => 'Muuda profiili',
     'dark_mode' => 'Tume režiim',
     'light_mode' => 'Hele režiim',
+    'global_search' => 'Globaalne otsing',
 
     // Layout tabs
     'tab_info' => 'Info',

@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Aquest domini de correu electrònic no té accés a aquesta aplicació',
     'register_success' => 'Gràcies per registrar-vos! Ja us hi heu registrat i heu iniciat la sessió.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'Proceed with authentication',
+
     // Password Reset
     'reset_password' => 'Restableix la contrasenya',
     'reset_password_send_instructions' => 'Introduïu la vostra adreça electrònica a continuació i us enviarem un correu electrònic amb un enllaç per a restablir la contrasenya.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Cal confirmar l\'adreça electrònica, però el sistema no ha pogut enviar el correu electrònic. Poseu-vos en contacte amb l\'administrador perquè s\'asseguri que el correu electrònic està ben configurat.',
     'email_confirm_success' => 'Your email has been confirmed! You should now be able to login using this email address.',
     'email_confirm_resent' => 'S\'ha tornat a enviar el correu electrònic de confirmació. Reviseu la vostra safata d\'entrada.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Adreça electrònica no confirmada',
     'email_not_confirmed_text' => 'La vostra adreça electrònica encara no està confirmada.',

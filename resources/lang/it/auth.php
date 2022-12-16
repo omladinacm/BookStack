@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Questo dominio della mail non ha accesso a questa applicazione',
     'register_success' => 'Grazie per la registrazione! Sei registrato e loggato.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Tentativo di accesso',
+    'auto_init_starting_desc' => 'Stiamo contattando il vostro sistema di autenticazione per avviare il processo di login. Se dopo 5 secondi non si verifica alcun progresso, si può provare a fare clic sul link sottostante.',
+    'auto_init_start_link' => 'Procedi con l\'autenticazione',
+
     // Password Reset
     'reset_password' => 'Reimposta Password',
     'reset_password_send_instructions' => 'Inserisci il tuo indirizzo sotto e ti verrà inviata una mail contenente un link per resettare la tua password.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'La conferma della mail è richiesta ma non è stato possibile mandare la mail. Contatta l\'amministratore.',
     'email_confirm_success' => 'La tua email è stata confermata! Ora dovresti essere in grado di effettuare il login utilizzando questo indirizzo email.',
     'email_confirm_resent' => 'Mail di conferma reinviata, controlla la tua posta.',
+    'email_confirm_thanks' => 'Grazie per la conferma!',
+    'email_confirm_thanks_desc' => 'Attendere un momento mentre la conferma viene gestita. Se non si è reindirizzati dopo 3 secondi, premere il link "Continua" qui sotto per procedere.',
 
     'email_not_confirmed' => 'Indirizzo Email Non Confermato',
     'email_not_confirmed_text' => 'Il tuo indirizzo email non è ancora stato confermato.',

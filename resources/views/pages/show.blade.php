@@ -4,6 +4,8 @@
     <meta property="og:description" content="{{ Str::limit($page->text, 100, '...') }}">
 @endpush
 
+@include('entities.body-tag-classes', ['entity' => $page])
+
 @section('body')
 
     <div class="mb-m print-hidden">
@@ -15,10 +17,12 @@
     </div>
 
     <main class="content-wrap card">
-        <div class="page-content clearfix" page-display="{{ $page->id }}">
-            @include('pages.parts.pointer', ['page' => $page])
+        <div component="page-display"
+             option:page-display:page-id="{{ $page->id }}"
+             class="page-content clearfix">
             @include('pages.parts.page-display')
         </div>
+        @include('pages.parts.pointer', ['page' => $page])
     </main>
 
     @include('entities.sibling-navigation', ['next' => $next, 'previous' => $previous])
@@ -76,42 +80,61 @@
 @section('right')
     <div id="page-details" class="entity-details mb-xl">
         <h5>{{ trans('common.details') }}</h5>
-        <div class="body text-small blended-links">
+        <div class="blended-links">
             @include('entities.meta', ['entity' => $page])
 
-            @if($book->restricted)
+            @if($book->hasPermissions())
                 <div class="active-restriction">
                     @if(userCan('restrictions-manage', $book))
-                        <a href="{{ $book->getUrl('/permissions') }}">@icon('lock'){{ trans('entities.books_permissions_active') }}</a>
+                        <a href="{{ $book->getUrl('/permissions') }}" class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.books_permissions_active') }}</div>
+                        </a>
                     @else
-                        @icon('lock'){{ trans('entities.books_permissions_active') }}
+                        <div class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.books_permissions_active') }}</div>
+                        </div>
                     @endif
                 </div>
             @endif
 
-            @if($page->chapter && $page->chapter->restricted)
+            @if($page->chapter && $page->chapter->hasPermissions())
                 <div class="active-restriction">
                     @if(userCan('restrictions-manage', $page->chapter))
-                        <a href="{{ $page->chapter->getUrl('/permissions') }}">@icon('lock'){{ trans('entities.chapters_permissions_active') }}</a>
+                        <a href="{{ $page->chapter->getUrl('/permissions') }}" class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.chapters_permissions_active') }}</div>
+                        </a>
                     @else
-                        @icon('lock'){{ trans('entities.chapters_permissions_active') }}
+                        <div class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.chapters_permissions_active') }}</div>
+                        </div>
                     @endif
                 </div>
             @endif
 
-            @if($page->restricted)
+            @if($page->hasPermissions())
                 <div class="active-restriction">
                     @if(userCan('restrictions-manage', $page))
-                        <a href="{{ $page->getUrl('/permissions') }}">@icon('lock'){{ trans('entities.pages_permissions_active') }}</a>
+                        <a href="{{ $page->getUrl('/permissions') }}" class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.pages_permissions_active') }}</div>
+                        </a>
                     @else
-                        @icon('lock'){{ trans('entities.pages_permissions_active') }}
+                        <div class="entity-meta-item">
+                            @icon('lock')
+                            <div>{{ trans('entities.pages_permissions_active') }}</div>
+                        </div>
                     @endif
                 </div>
             @endif
 
             @if($page->template)
-                <div>
-                    @icon('template'){{ trans('entities.pages_is_template') }}
+                <div class="entity-meta-item">
+                    @icon('template')
+                    <div>{{ trans('entities.pages_is_template') }}</div>
                 </div>
             @endif
         </div>
@@ -124,37 +147,37 @@
 
             {{--User Actions--}}
             @if(userCan('page-update', $page))
-                <a href="{{ $page->getUrl('/edit') }}" class="icon-list-item">
+                <a href="{{ $page->getUrl('/edit') }}" data-shortcut="edit" class="icon-list-item">
                     <span>@icon('edit')</span>
                     <span>{{ trans('common.edit') }}</span>
                 </a>
             @endif
-            @if(userCanOnAny('page-create'))
-                <a href="{{ $page->getUrl('/copy') }}" class="icon-list-item">
+            @if(userCanOnAny('create', \BookStack\Entities\Models\Book::class) || userCanOnAny('create', \BookStack\Entities\Models\Chapter::class) || userCan('page-create-all') || userCan('page-create-own'))
+                <a href="{{ $page->getUrl('/copy') }}" data-shortcut="copy" class="icon-list-item">
                     <span>@icon('copy')</span>
                     <span>{{ trans('common.copy') }}</span>
                 </a>
             @endif
             @if(userCan('page-update', $page))
                 @if(userCan('page-delete', $page))
-	                <a href="{{ $page->getUrl('/move') }}" class="icon-list-item">
+	                <a href="{{ $page->getUrl('/move') }}" data-shortcut="move" class="icon-list-item">
 	                    <span>@icon('folder')</span>
 	                    <span>{{ trans('common.move') }}</span>
 	                </a>
                 @endif
-                <a href="{{ $page->getUrl('/revisions') }}" class="icon-list-item">
-                    <span>@icon('history')</span>
-                    <span>{{ trans('entities.revisions') }}</span>
-                </a>
             @endif
+            <a href="{{ $page->getUrl('/revisions') }}" data-shortcut="revisions" class="icon-list-item">
+                <span>@icon('history')</span>
+                <span>{{ trans('entities.revisions') }}</span>
+            </a>
             @if(userCan('restrictions-manage', $page))
-                <a href="{{ $page->getUrl('/permissions') }}" class="icon-list-item">
+                <a href="{{ $page->getUrl('/permissions') }}" data-shortcut="permissions" class="icon-list-item">
                     <span>@icon('lock')</span>
                     <span>{{ trans('entities.permissions') }}</span>
                 </a>
             @endif
             @if(userCan('page-delete', $page))
-                <a href="{{ $page->getUrl('/delete') }}" class="icon-list-item">
+                <a href="{{ $page->getUrl('/delete') }}" data-shortcut="delete" class="icon-list-item">
                     <span>@icon('delete')</span>
                     <span>{{ trans('common.delete') }}</span>
                 </a>

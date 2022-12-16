@@ -25,6 +25,7 @@ return [
     'actions' => 'Tindakan',
     'view' => 'Lihat',
     'view_all' => 'Lihat Semua',
+    'new' => 'New',
     'create' => 'Buat',
     'update' => 'Perbarui',
     'edit' => 'Sunting',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Sebelumnya',
     'filter_active' => 'Active Filter:',
     'filter_clear' => 'Clear Filter',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Opsi Sortir',
@@ -78,12 +81,14 @@ return [
     'none' => 'None',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Perluas Menu Tajuk',
     'profile_menu' => 'Menu Profil',
     'view_profile' => 'Tampilkan Profil',
     'edit_profile' => 'Sunting Profil',
     'dark_mode' => 'Mode Gelap',
     'light_mode' => 'Mode Terang',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Informasi',

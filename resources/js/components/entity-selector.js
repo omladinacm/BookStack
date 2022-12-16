@@ -1,10 +1,10 @@
 import {onChildEvent} from "../services/dom";
+import {Component} from "./component";
 
 /**
  * Entity Selector
- * @extends {Component}
  */
-class EntitySelector {
+export class EntitySelector extends Component {
 
     setup() {
         this.elem = this.$el;
@@ -87,6 +87,16 @@ class EntitySelector {
         }
     }
 
+    reset() {
+        this.searchInput.value = '';
+        this.showLoading();
+        this.initialLoad();
+    }
+
+    focusSearch() {
+        this.searchInput.focus();
+    }
+
     showLoading() {
         this.loading.style.display = 'block';
         this.resultsContainer.style.display = 'none';
@@ -105,7 +115,7 @@ class EntitySelector {
     }
 
     searchUrl() {
-        return `/ajax/search/entities?types=${encodeURIComponent(this.entityTypes)}&permission=${encodeURIComponent(this.entityPermission)}`;
+        return `/search/entity-selector?types=${encodeURIComponent(this.entityTypes)}&permission=${encodeURIComponent(this.entityPermission)}`;
     }
 
     searchEntities(searchTerm) {
@@ -176,5 +186,3 @@ class EntitySelector {
     }
 
 }
-
-export default EntitySelector;

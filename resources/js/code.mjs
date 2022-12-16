@@ -4,6 +4,7 @@ import Clipboard from "clipboard/dist/clipboard.min";
 // Modes
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/dart/dart';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/fortran/fortran';
 import 'codemirror/mode/go/go';
@@ -15,6 +16,7 @@ import 'codemirror/mode/lua/lua';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/mllike/mllike';
 import 'codemirror/mode/nginx/nginx';
+import 'codemirror/mode/octave/octave';
 import 'codemirror/mode/perl/perl';
 import 'codemirror/mode/pascal/pascal';
 import 'codemirror/mode/php/php';
@@ -25,6 +27,8 @@ import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/stex/stex';
+import 'codemirror/mode/swift/swift';
 import 'codemirror/mode/toml/toml';
 import 'codemirror/mode/vb/vb';
 import 'codemirror/mode/vbscript/vbscript';
@@ -38,6 +42,7 @@ import 'codemirror/addon/scroll/scrollpastend';
 // Value can be a mode string or a function that will receive the code content & return the mode string.
 // The function option is used in the event the exact mode could be dynamic depending on the code.
 const modeMap = {
+    bash: 'shell',
     css: 'css',
     c: 'text/x-csrc',
     java: 'text/x-java',
@@ -46,30 +51,36 @@ const modeMap = {
     'c++': 'text/x-c++src',
     'c#': 'text/x-csharp',
     csharp: 'text/x-csharp',
+    dart: 'application/dart',
     diff: 'diff',
     for: 'fortran',
     fortran: 'fortran',
+    'f#': 'text/x-fsharp',
+    fsharp: 'text/x-fsharp',
     go: 'go',
     haskell: 'haskell',
     hs: 'haskell',
     html: 'htmlmixed',
     ini: 'properties',
-    javascript: 'javascript',
-    json: {name: 'javascript', json: true},
-    js: 'javascript',
-    jl: 'julia',
-    julia: 'julia',
+    javascript: 'text/javascript',
+    json: 'application/json',
+    js: 'text/javascript',
+    jl: 'text/x-julia',
+    julia: 'text/x-julia',
+    latex: 'text/x-stex',
     lua: 'lua',
+    matlab: 'text/x-octave',
     md: 'markdown',
     mdown: 'markdown',
     markdown: 'markdown',
     ml: 'mllike',
     nginx: 'nginx',
+    octave: 'text/x-octave',
     perl: 'perl',
     pl: 'perl',
     powershell: 'powershell',
     properties: 'properties',
-    ocaml: 'mllike',
+    ocaml: 'text/x-ocaml',
     pascal: 'text/x-pascal',
     pas: 'text/x-pascal',
     php: (content) => {
@@ -83,9 +94,12 @@ const modeMap = {
     rs: 'rust',
     shell: 'shell',
     sh: 'shell',
-    bash: 'shell',
-    toml: 'toml',
     sql: 'text/x-sql',
+    stext: 'text/x-stex',
+    swift: 'text/x-swift',
+    toml: 'toml',
+    ts: 'text/typescript',
+    typescript: 'text/typescript',
     vbs: 'vbscript',
     vbscript: 'vbscript',
     'vb.net': 'text/x-vb',
@@ -239,6 +253,21 @@ export function popupEditor(elem, modeSuggestion) {
         lineNumbers: true,
         lineWrapping: false,
         theme: getTheme()
+    });
+}
+
+/**
+ * Create an inline editor to replace the given textarea.
+ * @param {HTMLTextAreaElement} textArea
+ * @param {String} mode
+ * @returns {CodeMirror3}
+ */
+export function inlineEditor(textArea, mode) {
+    return CodeMirror.fromTextArea(textArea, {
+        mode: getMode(mode, textArea.value),
+        lineNumbers: true,
+        lineWrapping: false,
+        theme: getTheme(),
     });
 }
 

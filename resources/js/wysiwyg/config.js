@@ -3,6 +3,7 @@ import {listen as listenForCommonEvents} from "./common-events";
 import {scrollToQueryString} from "./scrolling";
 import {listenForDragAndPaste} from "./drop-paste-handling";
 import {getPrimaryToolbar, registerAdditionalToolbars} from "./toolbars";
+import {registerCustomIcons} from "./icons";
 
 import {getPlugin as getCodeeditorPlugin} from "./plugin-codeeditor";
 import {getPlugin as getDrawioPlugin} from "./plugin-drawio";
@@ -39,11 +40,42 @@ const formats = {
     calloutdanger: {block: 'p', exact: true, attributes: {class: 'callout danger'}}
 };
 
+const color_map = [
+    '#BFEDD2', '',
+    '#FBEEB8', '',
+    '#F8CAC6', '',
+    '#ECCAFA', '',
+    '#C2E0F4', '',
+
+    '#2DC26B', '',
+    '#F1C40F', '',
+    '#E03E2D', '',
+    '#B96AD9', '',
+    '#3598DB', '',
+
+    '#169179', '',
+    '#E67E23', '',
+    '#BA372A', '',
+    '#843FA1', '',
+    '#236FA1', '',
+
+    '#ECF0F1', '',
+    '#CED4D9', '',
+    '#95A5A6', '',
+    '#7E8C8D', '',
+    '#34495E', '',
+
+    '#000000', '',
+    '#ffffff', ''
+];
+
 function file_picker_callback(callback, value, meta) {
 
     // field_name, url, type, win
     if (meta.filetype === 'file') {
-        window.EntitySelectorPopup.show(entity => {
+        /** @type {EntitySelectorPopup} **/
+        const selector = window.$components.first('entity-selector-popup');
+        selector.show(entity => {
             callback(entity.link, {
                 text: entity.name,
                 title: entity.name,
@@ -53,7 +85,9 @@ function file_picker_callback(callback, value, meta) {
 
     if (meta.filetype === 'image') {
         // Show image manager
-        window.ImageManager.show(function (image) {
+        /** @type {ImageManager} **/
+        const imageManager = window.$components.first('image-manager');
+        imageManager.show(function (image) {
             callback(image.url, {alt: image.name});
         }, 'gallery');
     }
@@ -62,14 +96,12 @@ function file_picker_callback(callback, value, meta) {
 
 /**
  * @param {WysiwygConfigOptions} options
- * @return {string}
+ * @return {string[]}
  */
 function gatherPlugins(options) {
     const plugins = [
         "image",
-        "imagetools",
         "table",
-        "paste",
         "link",
         "autolink",
         "fullscreen",
@@ -98,7 +130,7 @@ function gatherPlugins(options) {
         plugins.push('drawio');
     }
 
-    return plugins.filter(plugin => Boolean(plugin)).join(' ');
+    return plugins.filter(plugin => Boolean(plugin));
 }
 
 /**
@@ -123,7 +155,7 @@ function setupBrFilter(editor) {
     editor.serializer.addNodeFilter('br', function(nodes) {
         for (const node of nodes) {
             if (node.parent && node.parent.name === 'code') {
-                const newline = new tinymce.html.Node.create('#text');
+                const newline = tinymce.html.Node.create('#text');
                 newline.value = '\n';
                 node.replace(newline);
             }
@@ -139,13 +171,13 @@ function getSetupCallback(options) {
     return function(editor) {
         editor.on('ExecCommand change input NodeChange ObjectResized', editorChange);
         listenForCommonEvents(editor);
-        registerShortcuts(editor);
         listenForDragAndPaste(editor, options);
 
         editor.on('init', () => {
             editorChange();
             scrollToQueryString(editor);
             window.editor = editor;
+            registerShortcuts(editor);
         });
 
         editor.on('PreInit', () => {
@@ -215,7 +247,7 @@ export function build(options) {
             window.baseUrl('/dist/styles.css'),
         ],
         branding: false,
-        skin: options.darkMode ? 'oxide-dark' : 'oxide',
+        skin: options.darkMode ? 'tinymce-5-dark' : 'tinymce-5',
         body_class: 'page-content',
         browser_spellcheck: true,
         relative_urls: false,
@@ -228,7 +260,7 @@ export function build(options) {
         statusbar: false,
         menubar: false,
         paste_data_images: false,
-        extended_valid_elements: 'pre[*],svg[*],div[drawio-diagram],details[*],summary[*],div[*],li[class|checked]',
+        extended_valid_elements: 'pre[*],svg[*],div[drawio-diagram],details[*],summary[*],div[*],li[class|checked|style]',
         automatic_uploads: false,
         custom_elements: 'doc-root,code-block',
         valid_children: [
@@ -237,10 +269,9 @@ export function build(options) {
             "-doc-root[doc-root|#text]",
             "-li[details]",
             "+code-block[pre]",
-            "+doc-root[code-block]"
+            "+doc-root[p|h1|h2|h3|h4|h5|h6|blockquote|code-block|div]"
         ].join(','),
         plugins: gatherPlugins(options),
-        imagetools_toolbar: 'imageoptions',
         contextmenu: false,
         toolbar: getPrimaryToolbar(options),
         content_style: getContentStyle(options),
@@ -249,7 +280,10 @@ export function build(options) {
         media_alt_source: false,
         media_poster: false,
         formats,
+        table_style_by_css: true,
+        table_use_colgroups: true,
         file_picker_types: 'file image',
+        color_map,
         file_picker_callback,
         paste_preprocess(plugin, args) {
             const content = args.content;
@@ -262,6 +296,7 @@ export function build(options) {
             head.innerHTML += fetchCustomHeadContent();
         },
         setup(editor) {
+            registerCustomIcons(editor);
             registerAdditionalToolbars(editor, options);
             getSetupCallback(options)(editor);
         },

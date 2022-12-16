@@ -25,6 +25,7 @@ return [
     'actions' => 'Accions',
     'view' => 'Visualitza',
     'view_all' => 'Visualitza-ho tot',
+    'new' => 'New',
     'create' => 'Crea',
     'update' => 'Actualitza',
     'edit' => 'Edita',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Previous',
     'filter_active' => 'Active Filter:',
     'filter_clear' => 'Clear Filter',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Opcions d\'ordenació',
@@ -78,12 +81,14 @@ return [
     'none' => 'None',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Expand Header Menu',
     'profile_menu' => 'Menú del perfil',
     'view_profile' => 'Mostra el perfil',
     'edit_profile' => 'Edita el perfil',
     'dark_mode' => 'Mode fosc',
     'light_mode' => 'Mode clar',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Informació',

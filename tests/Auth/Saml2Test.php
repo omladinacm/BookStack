@@ -41,6 +41,20 @@ class Saml2Test extends TestCase
         $req->assertSee(url('/saml2/acs'));
     }
 
+    public function test_metadata_endpoint_loads_when_autoloading_with_bad_url_set()
+    {
+        config()->set([
+            'saml2.autoload_from_metadata' => true,
+            'saml2.onelogin.idp.entityId' => 'http://192.168.1.1:9292',
+            'saml2.onelogin.idp.singleSignOnService.url' => null,
+        ]);
+
+        $req = $this->get('/saml2/metadata');
+        $req->assertOk();
+        $req->assertHeader('Content-Type', 'text/xml; charset=UTF-8');
+        $req->assertSee('md:EntityDescriptor');
+    }
+
     public function test_onelogin_overrides_functions_as_expected()
     {
         $json = '{"sp": {"assertionConsumerService": {"url": "https://example.com/super-cats"}}, "contactPerson": {"technical": {"givenName": "Barry Scott", "emailAddress": "barry@example.com"}}}';
@@ -56,7 +70,7 @@ class Saml2Test extends TestCase
     {
         $req = $this->get('/login');
         $req->assertSeeText('SingleSignOn-Testing');
-        $req->assertElementExists('form[action$="/saml2/login"][method=POST] button');
+        $this->withHtml($req)->assertElementExists('form[action$="/saml2/login"][method=POST] button');
     }
 
     public function test_login()
@@ -157,7 +171,7 @@ class Saml2Test extends TestCase
         ]);
 
         $resp = $this->actingAs($this->getEditor())->get('/');
-        $resp->assertElementContains('form[action$="/saml2/logout"] button', 'Logout');
+        $this->withHtml($resp)->assertElementContains('form[action$="/saml2/logout"] button', 'Logout');
     }
 
     public function test_logout_sls_flow()

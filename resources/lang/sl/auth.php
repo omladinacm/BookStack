@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Ta e-poštna domena nima dostopa do te aplikacije',
     'register_success' => 'Hvala za registracijo! Sedaj ste registrirani in prijavljeni.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'Proceed with authentication',
+
     // Password Reset
     'reset_password' => 'Ponastavi geslo',
     'reset_password_send_instructions' => 'Spodaj vpišite vaš e-poštni naslov in prejeli boste e-pošto s povezavo za ponastavitev gesla.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'E-poštna potrditev je zahtevana ampak sistem ni mogel poslati e-pošte. Kontaktirajte administratorja, da zagotovite, da je e-pošta pravilno nastavljena.',
     'email_confirm_success' => 'Your email has been confirmed! You should now be able to login using this email address.',
     'email_confirm_resent' => 'Poslali smo vam potrditveno sporočilo. Prosimo preverite svojo elektronsko pošto.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Elektronski naslov ni potrjen',
     'email_not_confirmed_text' => 'Vaš e-naslov še ni bil potrjen.',

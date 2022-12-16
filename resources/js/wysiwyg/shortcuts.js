@@ -16,6 +16,8 @@ export function register(editor) {
     editor.shortcuts.add('meta+e', '', ['codeeditor', false, 'pre']);
     editor.shortcuts.add('meta+8', '', ['FormatBlock', false, 'code']);
     editor.shortcuts.add('meta+shift+E', '', ['FormatBlock', false, 'code']);
+    editor.shortcuts.add('meta+o', '', 'InsertOrderedList');
+    editor.shortcuts.add('meta+p', '', 'InsertUnorderedList');
 
     // Save draft shortcut
     editor.shortcuts.add('meta+S', '', () => {
@@ -42,7 +44,9 @@ export function register(editor) {
 
     // Link selector shortcut
     editor.shortcuts.add('meta+shift+K', '', function() {
-        window.EntitySelectorPopup.show(function(entity) {
+        /** @var {EntitySelectorPopup} **/
+        const selectorPopup = window.$components.first('entity-selector-popup');
+        selectorPopup.show(function(entity) {
 
             if (editor.selection.isCollapsed()) {
                 editor.insertContent(editor.dom.createHTML('a', {href: entity.link}, editor.dom.encode(entity.name)));

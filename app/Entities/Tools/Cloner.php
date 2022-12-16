@@ -4,8 +4,10 @@ namespace BookStack\Entities\Tools;
 
 use BookStack\Actions\Tag;
 use BookStack\Entities\Models\Book;
+use BookStack\Entities\Models\Bookshelf;
 use BookStack\Entities\Models\Chapter;
 use BookStack\Entities\Models\Entity;
+use BookStack\Entities\Models\HasCoverImage;
 use BookStack\Entities\Models\Page;
 use BookStack\Entities\Repos\BookRepo;
 use BookStack\Entities\Repos\ChapterRepo;
@@ -16,25 +18,10 @@ use Illuminate\Http\UploadedFile;
 
 class Cloner
 {
-    /**
-     * @var PageRepo
-     */
-    protected $pageRepo;
-
-    /**
-     * @var ChapterRepo
-     */
-    protected $chapterRepo;
-
-    /**
-     * @var BookRepo
-     */
-    protected $bookRepo;
-
-    /**
-     * @var ImageService
-     */
-    protected $imageService;
+    protected PageRepo $pageRepo;
+    protected ChapterRepo $chapterRepo;
+    protected BookRepo $bookRepo;
+    protected ImageService $imageService;
 
     public function __construct(PageRepo $pageRepo, ChapterRepo $chapterRepo, BookRepo $bookRepo, ImageService $imageService)
     {
@@ -50,11 +37,8 @@ class Cloner
     public function clonePage(Page $original, Entity $parent, string $newName): Page
     {
         $copyPage = $this->pageRepo->getNewDraftPage($parent);
-        $pageData = $original->getAttributes();
-
-        // Update name & tags
+        $pageData = $this->entityToInputData($original);
         $pageData['name'] = $newName;
-        $pageData['tags'] = $this->entityTagsToInputArray($original);
 
         return $this->pageRepo->publishDraft($copyPage, $pageData);
     }
@@ -65,9 +49,8 @@ class Cloner
      */
     public function cloneChapter(Chapter $original, Book $parent, string $newName): Chapter
     {
-        $chapterDetails = $original->getAttributes();
+        $chapterDetails = $this->entityToInputData($original);
         $chapterDetails['name'] = $newName;
-        $chapterDetails['tags'] = $this->entityTagsToInputArray($original);
 
         $copyChapter = $this->chapterRepo->create($chapterDetails, $parent);
 
@@ -87,12 +70,13 @@ class Cloner
      */
     public function cloneBook(Book $original, string $newName): Book
     {
-        $bookDetails = $original->getAttributes();
+        $bookDetails = $this->entityToInputData($original);
         $bookDetails['name'] = $newName;
-        $bookDetails['tags'] = $this->entityTagsToInputArray($original);
 
+        // Clone book
         $copyBook = $this->bookRepo->create($bookDetails);
 
+        // Clone contents
         $directChildren = $original->getDirectChildren();
         foreach ($directChildren as $child) {
             if ($child instanceof Chapter && userCan('chapter-create', $copyBook)) {
@@ -104,12 +88,11 @@ class Cloner
             }
         }
 
-        if ($original->cover) {
-            try {
-                $tmpImgFile = tmpfile();
-                $uploadedFile = $this->imageToUploadedFile($original->cover, $tmpImgFile);
-                $this->bookRepo->updateCoverImage($copyBook, $uploadedFile, false);
-            } catch (\Exception $exception) {
+        // Clone bookshelf relationships
+        /** @var Bookshelf $shelf */
+        foreach ($original->shelves as $shelf) {
+            if (userCan('bookshelf-update', $shelf)) {
+                $shelf->appendBook($copyBook);
             }
         }
 
@@ -117,13 +100,45 @@ class Cloner
     }
 
     /**
+     * Convert an entity to a raw data array of input data.
+     *
+     * @return array<string, mixed>
+     */
+    public function entityToInputData(Entity $entity): array
+    {
+        $inputData = $entity->getAttributes();
+        $inputData['tags'] = $this->entityTagsToInputArray($entity);
+
+        // Add a cover to the data if existing on the original entity
+        if ($entity instanceof HasCoverImage) {
+            $cover = $entity->cover()->first();
+            if ($cover) {
+                $inputData['image'] = $this->imageToUploadedFile($cover);
+            }
+        }
+
+        return $inputData;
+    }
+
+    /**
+     * Copy the permission settings from the source entity to the target entity.
+     */
+    public function copyEntityPermissions(Entity $sourceEntity, Entity $targetEntity): void
+    {
+        $permissions = $sourceEntity->permissions()->get(['role_id', 'view', 'create', 'update', 'delete'])->toArray();
+        $targetEntity->permissions()->delete();
+        $targetEntity->permissions()->createMany($permissions);
+        $targetEntity->rebuildPermissions();
+    }
+
+    /**
      * Convert an image instance to an UploadedFile instance to mimic
      * a file being uploaded.
      */
-    protected function imageToUploadedFile(Image $image, &$tmpFile): ?UploadedFile
+    protected function imageToUploadedFile(Image $image): ?UploadedFile
     {
         $imgData = $this->imageService->getImageData($image);
-        $tmpImgFilePath = stream_get_meta_data($tmpFile)['uri'];
+        $tmpImgFilePath = tempnam(sys_get_temp_dir(), 'bs_cover_clone_');
         file_put_contents($tmpImgFilePath, $imgData);
 
         return new UploadedFile($tmpImgFilePath, basename($image->path));

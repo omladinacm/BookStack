@@ -18,10 +18,10 @@ return [
 
     'name' => 'Ime',
     'username' => 'Korisničko ime',
-    'email' => 'Email',
+    'email' => 'E-pošta',
     'password' => 'Lozinka',
     'password_confirm' => 'Potvrdite lozinku',
-    'password_hint' => 'Must be at least 8 characters',
+    'password_hint' => 'Mora biti najmanje 8 znakova',
     'forgot_password' => 'Zaboravili ste lozinku?',
     'remember_me' => 'Zapamti me',
     'ldap_email_hint' => 'Molimo upišite mail korišten za ovaj račun.',
@@ -37,6 +37,11 @@ return [
     'registrations_disabled' => 'Registracije su trenutno onemogućene',
     'registration_email_domain_invalid' => 'Ova e-mail adresa se ne može koristiti u ovoj aplikaciji',
     'register_success' => 'Hvala na prijavi! Sada ste registrirani i prijavljeni.',
+
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'Proceed with authentication',
 
     // Password Reset
     'reset_password' => 'Promijenite lozinku',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Potvrda e-mail adrese je obavezna, ali sustav ne može poslati e-mail. Javite se administratoru kako bi provjerio vaš e-mail.',
     'email_confirm_success' => 'Your email has been confirmed! You should now be able to login using this email address.',
     'email_confirm_resent' => 'Ponovno je poslana potvrda. Molimo, provjerite svoj inbox.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'E-mail adresa nije potvrđena.',
     'email_not_confirmed_text' => 'Vaša e-mail adresa još nije potvrđena.',

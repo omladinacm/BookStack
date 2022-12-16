@@ -5,7 +5,7 @@
 body, button, input, select, label, textarea {
   font-family: $text;
 }
-.Codemirror, pre, #markdown-editor-input, .editor-toolbar, .code-base {
+.Codemirror, pre, #markdown-editor-input, .text-mono, .code-base {
   font-family: $mono;
 }
 
@@ -163,7 +163,6 @@ em, i, .italic {
 
 small, p.small, span.small, .text-small {
   font-size: 0.75rem;
-  @include lightDark(color, #5e5e5e, #999);
 }
 
 sup, .superscript {
@@ -275,6 +274,9 @@ span.highlight {
  * Lists
  */
 ul, ol {
+  padding-left: $-m * 2.0;
+  padding-right: $-m * 2.0;
+  display: flow-root;
   p {
     margin: 0;
   }
@@ -291,11 +293,6 @@ ul {
 
 ol {
   list-style: decimal;
-}
-
-ol, ul {
-  padding-left: $-m * 2.0;
-  padding-right: $-m * 2.0;
 }
 
 li > ol, li > ul {

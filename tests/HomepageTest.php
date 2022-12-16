@@ -4,8 +4,6 @@ namespace Tests;
 
 use BookStack\Auth\Role;
 use BookStack\Auth\User;
-use BookStack\Entities\Models\Bookshelf;
-use BookStack\Entities\Models\Page;
 
 class HomepageTest extends TestCase
 {
@@ -24,7 +22,7 @@ class HomepageTest extends TestCase
         $this->asEditor();
         $name = 'My custom homepage';
         $content = str_repeat('This is the body content of my custom homepage.', 20);
-        $customPage = $this->newPage(['name' => $name, 'html' => $content]);
+        $customPage = $this->entities->newPage(['name' => $name, 'html' => $content]);
         $this->setSettings(['app-homepage' => $customPage->id]);
         $this->setSettings(['app-homepage-type' => 'page']);
 
@@ -41,7 +39,7 @@ class HomepageTest extends TestCase
         $this->asEditor();
         $name = 'My custom homepage';
         $content = str_repeat('This is the body content of my custom homepage.', 20);
-        $customPage = $this->newPage(['name' => $name, 'html' => $content]);
+        $customPage = $this->entities->newPage(['name' => $name, 'html' => $content]);
         $this->setSettings([
             'app-homepage'      => $customPage->id,
             'app-homepage-type' => 'page',
@@ -49,7 +47,7 @@ class HomepageTest extends TestCase
 
         $homeVisit = $this->get('/');
         $homeVisit->assertSee($name);
-        $homeVisit->assertElementNotExists('#home-default');
+        $this->withHtml($homeVisit)->assertElementNotExists('#home-default');
 
         $pageDeleteReq = $this->delete($customPage->getUrl());
         $pageDeleteReq->assertStatus(302);
@@ -67,7 +65,7 @@ class HomepageTest extends TestCase
         $this->asEditor();
         $name = 'My custom homepage';
         $content = str_repeat('This is the body content of my custom homepage.', 20);
-        $customPage = $this->newPage(['name' => $name, 'html' => $content]);
+        $customPage = $this->entities->newPage(['name' => $name, 'html' => $content]);
         $this->setSettings([
             'app-homepage'      => $customPage->id,
             'app-homepage-type' => 'default',
@@ -81,8 +79,7 @@ class HomepageTest extends TestCase
 
     public function test_custom_homepage_cannot_be_deleted_from_parent_deletion()
     {
-        /** @var Page $page */
-        $page = Page::query()->first();
+        $page = $this->entities->page();
         $this->setSettings([
             'app-homepage'      => $page->id,
             'app-homepage-type' => 'page',
@@ -100,14 +97,13 @@ class HomepageTest extends TestCase
     public function test_custom_homepage_renders_includes()
     {
         $this->asEditor();
-        /** @var Page $included */
-        $included = Page::query()->first();
+        $included = $this->entities->page();
         $content = str_repeat('This is the body content of my custom homepage.', 20);
         $included->html = $content;
         $included->save();
 
         $name = 'My custom homepage';
-        $customPage = $this->newPage(['name' => $name, 'html' => '{{@' . $included->id . '}}']);
+        $customPage = $this->entities->newPage(['name' => $name, 'html' => '{{@' . $included->id . '}}']);
         $this->setSettings(['app-homepage' => $customPage->id]);
         $this->setSettings(['app-homepage-type' => 'page']);
 
@@ -139,7 +135,7 @@ class HomepageTest extends TestCase
     {
         $editor = $this->getEditor();
         setting()->putUser($editor, 'bookshelves_view_type', 'grid');
-        $shelf = Bookshelf::query()->firstOrFail();
+        $shelf = $this->entities->shelf();
 
         $this->setSettings(['app-homepage-type' => 'bookshelves']);
 
@@ -148,7 +144,7 @@ class HomepageTest extends TestCase
         $homeVisit->assertSee('Shelves');
         $homeVisit->assertSee('grid-card-content');
         $homeVisit->assertSee('featured-image-container');
-        $homeVisit->assertElementContains('.grid-card', $shelf->name);
+        $this->withHtml($homeVisit)->assertElementContains('.grid-card', $shelf->name);
 
         $this->setSettings(['app-homepage-type' => false]);
         $this->test_default_homepage_visible();
@@ -161,26 +157,26 @@ class HomepageTest extends TestCase
         $this->setSettings(['app-homepage-type' => 'bookshelves']);
         $this->asEditor();
 
-        $shelf = Bookshelf::query()->first();
+        $shelf = $this->entities->shelf();
         $book = $shelf->books()->first();
 
         // Ensure initially visible
         $homeVisit = $this->get('/');
-        $homeVisit->assertElementContains('.content-wrap', $shelf->name);
-        $homeVisit->assertElementContains('.content-wrap', $book->name);
+        $this->withHtml($homeVisit)->assertElementContains('.content-wrap', $shelf->name);
+        $this->withHtml($homeVisit)->assertElementContains('.content-wrap', $book->name);
 
         // Ensure book no longer visible without view permission
         $editor->roles()->detach();
         $this->giveUserPermissions($editor, ['bookshelf-view-all']);
         $homeVisit = $this->get('/');
-        $homeVisit->assertElementContains('.content-wrap', $shelf->name);
-        $homeVisit->assertElementNotContains('.content-wrap', $book->name);
+        $this->withHtml($homeVisit)->assertElementContains('.content-wrap', $shelf->name);
+        $this->withHtml($homeVisit)->assertElementNotContains('.content-wrap', $book->name);
 
         // Ensure is visible again with entity-level view permission
-        $this->setEntityRestrictions($book, ['view'], [$editor->roles()->first()]);
+        $this->entities->setPermissions($book, ['view'], [$editor->roles()->first()]);
         $homeVisit = $this->get('/');
-        $homeVisit->assertElementContains('.content-wrap', $shelf->name);
-        $homeVisit->assertElementContains('.content-wrap', $book->name);
+        $this->withHtml($homeVisit)->assertElementContains('.content-wrap', $shelf->name);
+        $this->withHtml($homeVisit)->assertElementContains('.content-wrap', $book->name);
     }
 
     public function test_new_users_dont_have_any_recently_viewed()
@@ -190,6 +186,6 @@ class HomepageTest extends TestCase
         $user->attachRole($viewRole);
 
         $homeVisit = $this->actingAs($user)->get('/');
-        $homeVisit->assertElementContains('#recently-viewed', 'You have not viewed any pages');
+        $this->withHtml($homeVisit)->assertElementContains('#recently-viewed', 'You have not viewed any pages');
     }
 }

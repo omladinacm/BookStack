@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Cette adresse e-mail ne peut pas accéder à l\'application',
     'register_success' => 'Merci pour votre inscription. Vous êtes maintenant inscrit(e) et connecté(e)',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Tentative de connexion',
+    'auto_init_starting_desc' => 'Nous contactons votre système d\'authentification pour démarrer le processus de connexion. S\'il n\'y a pas de progrès après 5 secondes, vous pouvez essayer de cliquer sur le lien ci-dessous.',
+    'auto_init_start_link' => 'Procéder à l\'authentification',
+
     // Password Reset
     'reset_password' => 'Réinitialiser le mot de passe',
     'reset_password_send_instructions' => 'Entrez votre adresse e-mail ci-dessous et un e-mail avec un lien de réinitialisation de mot de passe vous sera envoyé.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'La confirmation par e-mail est requise mais le système n\'a pas pu envoyer l\'e-mail. Contactez l\'administrateur système.',
     'email_confirm_success' => 'Votre adresse e-mail a été confirmée ! Vous devriez maintenant pouvoir vous connecter en utilisant cette adresse e-mail.',
     'email_confirm_resent' => 'L\'e-mail de confirmation a été ré-envoyé. Vérifiez votre boîte de réception.',
+    'email_confirm_thanks' => 'Merci d\'avoir confirmé !',
+    'email_confirm_thanks_desc' => 'Veuillez patienter un moment pendant que votre confirmation est traitée. Si vous n’êtes pas redirigé après 3 secondes, appuyez sur le lien « Continuer » ci-dessous pour continuer.',
 
     'email_not_confirmed' => 'Adresse e-mail non confirmée',
     'email_not_confirmed_text' => 'Votre adresse e-mail n\'a pas été confirmée.',

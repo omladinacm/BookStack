@@ -1,11 +1,14 @@
 import Sortable from "sortablejs";
+import {Component} from "./component";
 
-class ShelfSort {
+export class ShelfSort extends Component {
 
-    constructor(elem) {
-        this.elem = elem;
-        this.input = document.getElementById('books-input');
-        this.shelfBooksList = elem.querySelector('[shelf-sort-assigned-books]');
+    setup() {
+        this.elem = this.$el;
+        this.input = this.$refs.input;
+        this.shelfBookList = this.$refs.shelfBookList;
+        this.allBookList = this.$refs.allBookList;
+        this.bookSearchInput = this.$refs.bookSearch;
 
         this.initSortable();
         this.setupListeners();
@@ -13,10 +16,11 @@ class ShelfSort {
 
     initSortable() {
         const scrollBoxes = this.elem.querySelectorAll('.scroll-box');
-        for (let scrollBox of scrollBoxes) {
+        for (const scrollBox of scrollBoxes) {
             new Sortable(scrollBox, {
                 group: 'shelf-books',
                 ghostClass: 'primary-background-light',
+                handle: '.handle',
                 animation: 150,
                 onSort: this.onChange.bind(this),
             });
@@ -25,12 +29,36 @@ class ShelfSort {
 
     setupListeners() {
         this.elem.addEventListener('click', event => {
-            const sortItem = event.target.closest('.scroll-box-item:not(.instruction)');
+            const sortItem = event.target.closest('.scroll-box-item');
             if (sortItem) {
                 event.preventDefault();
                 this.sortItemClick(sortItem);
             }
         });
+
+        this.bookSearchInput.addEventListener('input', event => {
+            this.filterBooksByName(this.bookSearchInput.value);
+        });
+    }
+
+    /**
+     * @param {String} filterVal
+     */
+    filterBooksByName(filterVal) {
+
+        // Set height on first search, if not already set, to prevent the distraction
+        // of the list height jumping around
+        if (!this.allBookList.style.height) {
+            this.allBookList.style.height = this.allBookList.getBoundingClientRect().height + 'px';
+        }
+
+        const books = this.allBookList.children;
+        const lowerFilter = filterVal.trim().toLowerCase();
+
+        for (const bookEl of books) {
+            const show = !filterVal || bookEl.textContent.toLowerCase().includes(lowerFilter);
+            bookEl.style.display = show ? null : 'none';
+        }
     }
 
     /**
@@ -47,10 +75,8 @@ class ShelfSort {
     }
 
     onChange() {
-        const shelfBookElems = Array.from(this.shelfBooksList.querySelectorAll('[data-id]'));
+        const shelfBookElems = Array.from(this.shelfBookList.querySelectorAll('[data-id]'));
         this.input.value = shelfBookElems.map(elem => elem.getAttribute('data-id')).join(',');
     }
 
 }
-
-export default ShelfSort;

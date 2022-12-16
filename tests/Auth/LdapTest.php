@@ -6,9 +6,9 @@ use BookStack\Auth\Access\Ldap;
 use BookStack\Auth\Access\LdapService;
 use BookStack\Auth\Role;
 use BookStack\Auth\User;
+use Illuminate\Testing\TestResponse;
 use Mockery\MockInterface;
 use Tests\TestCase;
-use Tests\TestResponse;
 
 class LdapTest extends TestCase
 {
@@ -106,7 +106,7 @@ class LdapTest extends TestCase
         $resp->assertSee($this->mockUser->name);
 
         $resp = $this->followingRedirects()->mockUserLogin($this->mockUser->email);
-        $resp->assertElementExists('#home-default');
+        $this->withHtml($resp)->assertElementExists('#home-default');
         $resp->assertSee($this->mockUser->name);
         $this->assertDatabaseHas('users', [
             'email'            => $this->mockUser->email,
@@ -251,7 +251,8 @@ class LdapTest extends TestCase
 
     public function test_registration_disabled()
     {
-        $this->followingRedirects()->get('/register')->assertElementContains('#content', 'Log In');
+        $resp = $this->followingRedirects()->get('/register');
+        $this->withHtml($resp)->assertElementContains('#content', 'Log In');
     }
 
     public function test_non_admins_cannot_change_auth_id()
@@ -615,7 +616,7 @@ class LdapTest extends TestCase
 
     public function test_dump_user_details_option_works()
     {
-        config()->set(['services.ldap.dump_user_details' => true]);
+        config()->set(['services.ldap.dump_user_details' => true, 'services.ldap.thumbnail_attribute' => 'jpegphoto']);
 
         $this->commonLdapMocks(1, 1, 1, 1, 1);
         $this->mockLdap->shouldReceive('searchAndGetEntries')->times(1)
@@ -623,7 +624,9 @@ class LdapTest extends TestCase
             ->andReturn(['count' => 1, 0 => [
                 'uid' => [$this->mockUser->name],
                 'cn'  => [$this->mockUser->name],
-                'dn'  => ['dc=test' . config('services.ldap.base_dn')],
+                // Test dumping binary data for avatar responses
+                'jpegphoto' => base64_decode('/9j/4AAQSkZJRg=='),
+                'dn'        => ['dc=test' . config('services.ldap.base_dn')],
             ]]);
 
         $resp = $this->post('/login', [

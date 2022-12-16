@@ -25,6 +25,7 @@ return [
     'actions' => 'Akcje',
     'view' => 'Widok',
     'view_all' => 'Zobacz wszystkie',
+    'new' => 'Nowe',
     'create' => 'Utwórz',
     'update' => 'Zaktualizuj',
     'edit' => 'Edytuj',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Wstecz',
     'filter_active' => 'Aktywny filtr:',
     'filter_clear' => 'Wyczyść Filtr',
+    'download' => 'Pobierz',
+    'open_in_tab' => 'Otwórz w karcie',
 
     // Sort Options
     'sort_options' => 'Opcje sortowania',
@@ -75,15 +78,17 @@ return [
     'status_active' => 'Aktywny',
     'status_inactive' => 'Nieaktywny',
     'never' => 'Nigdy',
-    'none' => 'Żaden',
+    'none' => 'Brak',
 
     // Header
+    'homepage' => 'Strona domowa',
     'header_menu_expand' => 'Rozwiń menu nagłówka',
     'profile_menu' => 'Menu profilu',
     'view_profile' => 'Zobacz profil',
     'edit_profile' => 'Edytuj profil',
     'dark_mode' => 'Tryb ciemny',
     'light_mode' => 'Tryb jasny',
+    'global_search' => 'Wyszukiwanie globalne',
 
     // Layout tabs
     'tab_info' => 'Informacje',

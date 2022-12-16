@@ -7,7 +7,7 @@ export function getPrimaryToolbar(options) {
 
     const toolbar = [
         'undo redo',
-        'styleselect',
+        'styles',
         'bold italic underline forecolor backcolor formatoverflow',
         'alignleft aligncenter alignright alignjustify',
         'bullist numlist listoverflow',
@@ -36,7 +36,7 @@ function registerPrimaryToolbarGroups(editor) {
     editor.ui.registry.addGroupToolbarButton('insertoverflow', {
         icon: 'more-drawer',
         tooltip: 'More',
-        items: 'hr codeeditor drawio media details'
+        items: 'customhr codeeditor drawio media details'
     });
 }
 
@@ -56,9 +56,24 @@ function registerLinkContextToolbar(editor) {
 
 /**
  * @param {Editor} editor
+ */
+function registerImageContextToolbar(editor) {
+    editor.ui.registry.addContextToolbar('imagecontexttoolbar', {
+        predicate(node) {
+            return node.closest('img') !== null;
+        },
+        position: 'node',
+        scope: 'node',
+        items: 'image'
+    });
+}
+
+/**
+ * @param {Editor} editor
  * @param {WysiwygConfigOptions} options
  */
 export function registerAdditionalToolbars(editor, options) {
     registerPrimaryToolbarGroups(editor);
     registerLinkContextToolbar(editor);
+    registerImageContextToolbar(editor);
 }

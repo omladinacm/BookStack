@@ -25,6 +25,7 @@ return [
     'actions' => 'Akcie',
     'view' => 'Zobraziť',
     'view_all' => 'Zobraziť všetko',
+    'new' => 'New',
     'create' => 'Vytvoriť',
     'update' => 'Aktualizovať',
     'edit' => 'Editovať',
@@ -47,6 +48,8 @@ return [
     'previous' => 'Späť',
     'filter_active' => 'Aktívny filter:',
     'filter_clear' => 'Bez filtrovania',
+    'download' => 'Download',
+    'open_in_tab' => 'Open in Tab',
 
     // Sort Options
     'sort_options' => 'Možnosti triedenia',
@@ -78,12 +81,14 @@ return [
     'none' => 'None',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => 'Rozbaliť menu v záhlaví',
     'profile_menu' => 'Menu profilu',
     'view_profile' => 'Zobraziť profil',
     'edit_profile' => 'Upraviť profil',
     'dark_mode' => 'Tmavý režim',
     'light_mode' => 'Svetlý režim',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => 'Informácie',

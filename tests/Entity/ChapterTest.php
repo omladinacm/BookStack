@@ -11,18 +11,17 @@ class ChapterTest extends TestCase
 {
     public function test_create()
     {
-        /** @var Book $book */
-        $book = Book::query()->first();
+        $book = $this->entities->book();
 
         $chapter = Chapter::factory()->make([
             'name' => 'My First Chapter',
         ]);
 
         $resp = $this->asEditor()->get($book->getUrl());
-        $resp->assertElementContains('a[href="' . $book->getUrl('/create-chapter') . '"]', 'New Chapter');
+        $this->withHtml($resp)->assertElementContains('a[href="' . $book->getUrl('/create-chapter') . '"]', 'New Chapter');
 
         $resp = $this->get($book->getUrl('/create-chapter'));
-        $resp->assertElementContains('form[action="' . $book->getUrl('/create-chapter') . '"][method="POST"]', 'Save Chapter');
+        $this->withHtml($resp)->assertElementContains('form[action="' . $book->getUrl('/create-chapter') . '"][method="POST"]', 'Save Chapter');
 
         $resp = $this->post($book->getUrl('/create-chapter'), $chapter->only('name', 'description'));
         $resp->assertRedirect($book->getUrl('/chapter/my-first-chapter'));
@@ -53,28 +52,26 @@ class ChapterTest extends TestCase
         $this->assertTrue($chapter->deletions()->count() === 1);
 
         $redirectReq = $this->get($deleteReq->baseResponse->headers->get('location'));
-        $redirectReq->assertNotificationContains('Chapter Successfully Deleted');
+        $this->assertNotificationContains($redirectReq, 'Chapter Successfully Deleted');
     }
 
     public function test_show_view_has_copy_button()
     {
-        /** @var Chapter $chapter */
-        $chapter = Chapter::query()->first();
+        $chapter = $this->entities->chapter();
 
         $resp = $this->asEditor()->get($chapter->getUrl());
-        $resp->assertElementContains("a[href$=\"{$chapter->getUrl('/copy')}\"]", 'Copy');
+        $this->withHtml($resp)->assertElementContains("a[href$=\"{$chapter->getUrl('/copy')}\"]", 'Copy');
     }
 
     public function test_copy_view()
     {
-        /** @var Chapter $chapter */
-        $chapter = Chapter::query()->first();
+        $chapter = $this->entities->chapter();
 
         $resp = $this->asEditor()->get($chapter->getUrl('/copy'));
         $resp->assertOk();
         $resp->assertSee('Copy Chapter');
-        $resp->assertElementExists("input[name=\"name\"][value=\"{$chapter->name}\"]");
-        $resp->assertElementExists('input[name="entity_selection"]');
+        $this->withHtml($resp)->assertElementExists("input[name=\"name\"][value=\"{$chapter->name}\"]");
+        $this->withHtml($resp)->assertElementExists('input[name="entity_selection"]');
     }
 
     public function test_copy()
@@ -99,15 +96,12 @@ class ChapterTest extends TestCase
 
     public function test_copy_does_not_copy_non_visible_pages()
     {
-        /** @var Chapter $chapter */
-        $chapter = Chapter::query()->whereHas('pages')->first();
+        $chapter = $this->entities->chapterHasPages();
 
         // Hide pages to all non-admin roles
         /** @var Page $page */
         foreach ($chapter->pages as $page) {
-            $page->restricted = true;
-            $page->save();
-            $this->regenEntityPermissions($page);
+            $this->entities->setPermissions($page, [], []);
         }
 
         $this->asEditor()->post($chapter->getUrl('/copy'), [
@@ -121,8 +115,7 @@ class ChapterTest extends TestCase
 
     public function test_copy_does_not_copy_pages_if_user_cant_page_create()
     {
-        /** @var Chapter $chapter */
-        $chapter = Chapter::query()->whereHas('pages')->first();
+        $chapter = $this->entities->chapterHasPages();
         $viewer = $this->getViewer();
         $this->giveUserPermissions($viewer, ['chapter-create-all']);
 
@@ -145,5 +138,16 @@ class ChapterTest extends TestCase
         /** @var Chapter $newChapter2 */
         $newChapter2 = Chapter::query()->where('name', '=', 'My copied again chapter')->first();
         $this->assertEquals($chapter->pages()->count(), $newChapter2->pages()->count());
+    }
+
+    public function test_sort_book_action_visible_if_permissions_allow()
+    {
+        $chapter = $this->entities->chapter();
+
+        $resp = $this->actingAs($this->getViewer())->get($chapter->getUrl());
+        $this->withHtml($resp)->assertLinkNotExists($chapter->book->getUrl('sort'));
+
+        $resp = $this->asEditor()->get($chapter->getUrl());
+        $this->withHtml($resp)->assertLinkExists($chapter->book->getUrl('sort'));
     }
 }

@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => '该Email域名无权访问此应用程序',
     'register_success' => '感谢您注册:appName，您现在已经登录。',
 
+    // Login auto-initiation
+    'auto_init_starting' => '尝试登录中',
+    'auto_init_starting_desc' => '我们正在联系您的身份验证系统以启动登录过程。如果 5 秒后还没有进展，您可以尝试点击下面的链接。',
+    'auto_init_start_link' => '继续进行身份验证',
+
     // Password Reset
     'reset_password' => '重置密码',
     'reset_password_send_instructions' => '在下面输入您的Email地址，您将收到一封带有密码重置链接的邮件。',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => '需要Email验证，但系统无法发送电子邮件，请联系网站管理员。',
     'email_confirm_success' => '您已成功验证电子邮件地址！您现在可以使用此电子邮件地址登录。',
     'email_confirm_resent' => '验证邮件已重新发送，请检查收件箱。',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'Email地址未验证',
     'email_not_confirmed_text' => '您的电子邮件地址尚未确认。',

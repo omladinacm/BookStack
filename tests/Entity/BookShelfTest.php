@@ -18,43 +18,43 @@ class BookShelfTest extends TestCase
     {
         $viewer = $this->getViewer();
         $resp = $this->actingAs($viewer)->get('/');
-        $resp->assertElementContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementContains('header', 'Shelves');
 
         $viewer->roles()->delete();
         $this->giveUserPermissions($viewer);
         $resp = $this->actingAs($viewer)->get('/');
-        $resp->assertElementNotContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementNotContains('header', 'Shelves');
 
         $this->giveUserPermissions($viewer, ['bookshelf-view-all']);
         $resp = $this->actingAs($viewer)->get('/');
-        $resp->assertElementContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementContains('header', 'Shelves');
 
         $viewer->roles()->delete();
         $this->giveUserPermissions($viewer, ['bookshelf-view-own']);
         $resp = $this->actingAs($viewer)->get('/');
-        $resp->assertElementContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementContains('header', 'Shelves');
     }
 
     public function test_shelves_shows_in_header_if_have_any_shelve_view_permission()
     {
         $user = User::factory()->create();
         $this->giveUserPermissions($user, ['image-create-all']);
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $userRole = $user->roles()->first();
 
         $resp = $this->actingAs($user)->get('/');
-        $resp->assertElementNotContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementNotContains('header', 'Shelves');
 
-        $this->setEntityRestrictions($shelf, ['view'], [$userRole]);
+        $this->entities->setPermissions($shelf, ['view'], [$userRole]);
 
         $resp = $this->get('/');
-        $resp->assertElementContains('header', 'Shelves');
+        $this->withHtml($resp)->assertElementContains('header', 'Shelves');
     }
 
     public function test_shelves_page_contains_create_link()
     {
         $resp = $this->asEditor()->get('/shelves');
-        $resp->assertElementContains('a', 'New Shelf');
+        $this->withHtml($resp)->assertElementContains('a', 'New Shelf');
     }
 
     public function test_book_not_visible_in_shelf_list_view_if_user_cant_view_shelf()
@@ -62,14 +62,14 @@ class BookShelfTest extends TestCase
         config()->set([
             'setting-defaults.user.bookshelves_view_type' => 'list',
         ]);
-        $shelf = Bookshelf::query()->first();
+        $shelf = $this->entities->shelf();
         $book = $shelf->books()->first();
 
         $resp = $this->asEditor()->get('/shelves');
         $resp->assertSee($book->name);
         $resp->assertSee($book->getUrl());
 
-        $this->setEntityRestrictions($book, []);
+        $this->entities->setPermissions($book, []);
 
         $resp = $this->asEditor()->get('/shelves');
         $resp->assertDontSee($book->name);
@@ -100,8 +100,8 @@ class BookShelfTest extends TestCase
         $shelfPage = $this->get($shelf->getUrl());
         $shelfPage->assertSee($shelfInfo['name']);
         $shelfPage->assertSee($shelfInfo['description']);
-        $shelfPage->assertElementContains('.tag-item', 'Test Category');
-        $shelfPage->assertElementContains('.tag-item', 'Test Tag Value');
+        $this->withHtml($shelfPage)->assertElementContains('.tag-item', 'Test Category');
+        $this->withHtml($shelfPage)->assertElementContains('.tag-item', 'Test Tag Value');
 
         $this->assertDatabaseHas('bookshelves_books', ['bookshelf_id' => $shelf->id, 'book_id' => $booksToInclude[0]->id]);
         $this->assertDatabaseHas('bookshelves_books', ['bookshelf_id' => $shelf->id, 'book_id' => $booksToInclude[1]->id]);
@@ -125,11 +125,12 @@ class BookShelfTest extends TestCase
             'image_id' => $lastImage->id,
         ]);
         $this->assertEquals($lastImage->id, $shelf->cover->id);
+        $this->assertEquals('cover_bookshelf', $lastImage->type);
     }
 
     public function test_shelf_view()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asEditor()->get($shelf->getUrl());
         $resp->assertStatus(200);
         $resp->assertSeeText($shelf->name);
@@ -142,16 +143,16 @@ class BookShelfTest extends TestCase
 
     public function test_shelf_view_shows_action_buttons()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asAdmin()->get($shelf->getUrl());
         $resp->assertSee($shelf->getUrl('/create-book'));
         $resp->assertSee($shelf->getUrl('/edit'));
         $resp->assertSee($shelf->getUrl('/permissions'));
         $resp->assertSee($shelf->getUrl('/delete'));
-        $resp->assertElementContains('a', 'New Book');
-        $resp->assertElementContains('a', 'Edit');
-        $resp->assertElementContains('a', 'Permissions');
-        $resp->assertElementContains('a', 'Delete');
+        $this->withHtml($resp)->assertElementContains('a', 'New Book');
+        $this->withHtml($resp)->assertElementContains('a', 'Edit');
+        $this->withHtml($resp)->assertElementContains('a', 'Permissions');
+        $this->withHtml($resp)->assertElementContains('a', 'Delete');
 
         $resp = $this->asEditor()->get($shelf->getUrl());
         $resp->assertDontSee($shelf->getUrl('/permissions'));
@@ -159,10 +160,10 @@ class BookShelfTest extends TestCase
 
     public function test_shelf_view_has_sort_control_that_defaults_to_default()
     {
-        $shelf = Bookshelf::query()->first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asAdmin()->get($shelf->getUrl());
-        $resp->assertElementExists('form[action$="change-sort/shelf_books"]');
-        $resp->assertElementContains('form[action$="change-sort/shelf_books"] [aria-haspopup="true"]', 'Default');
+        $this->withHtml($resp)->assertElementExists('form[action$="change-sort/shelf_books"]');
+        $this->withHtml($resp)->assertElementContains('form[action$="change-sort/shelf_books"] [aria-haspopup="true"]', 'Default');
     }
 
     public function test_shelf_view_sort_takes_action()
@@ -182,27 +183,27 @@ class BookShelfTest extends TestCase
         $shelf->refresh();
 
         $resp = $this->asEditor()->get($shelf->getUrl());
-        $resp->assertElementContains('.book-content a.grid-card', $books[0]->name, 1);
-        $resp->assertElementNotContains('.book-content a.grid-card', $books[0]->name, 3);
+        $this->withHtml($resp)->assertElementContains('.book-content a.grid-card:nth-child(1)', $books[0]->name);
+        $this->withHtml($resp)->assertElementNotContains('.book-content a.grid-card:nth-child(3)', $books[0]->name);
 
         setting()->putUser($this->getEditor(), 'shelf_books_sort_order', 'desc');
         $resp = $this->asEditor()->get($shelf->getUrl());
-        $resp->assertElementNotContains('.book-content a.grid-card', $books[0]->name, 1);
-        $resp->assertElementContains('.book-content a.grid-card', $books[0]->name, 3);
+        $this->withHtml($resp)->assertElementNotContains('.book-content a.grid-card:nth-child(1)', $books[0]->name);
+        $this->withHtml($resp)->assertElementContains('.book-content a.grid-card:nth-child(3)', $books[0]->name);
 
         setting()->putUser($this->getEditor(), 'shelf_books_sort_order', 'desc');
         setting()->putUser($this->getEditor(), 'shelf_books_sort', 'name');
         $resp = $this->asEditor()->get($shelf->getUrl());
-        $resp->assertElementContains('.book-content a.grid-card', 'hdgfgdfg', 1);
-        $resp->assertElementContains('.book-content a.grid-card', 'bsfsdfsdfsd', 2);
-        $resp->assertElementContains('.book-content a.grid-card', 'adsfsdfsdfsd', 3);
+        $this->withHtml($resp)->assertElementContains('.book-content a.grid-card:nth-child(1)', 'hdgfgdfg');
+        $this->withHtml($resp)->assertElementContains('.book-content a.grid-card:nth-child(2)', 'bsfsdfsdfsd');
+        $this->withHtml($resp)->assertElementContains('.book-content a.grid-card:nth-child(3)', 'adsfsdfsdfsd');
     }
 
     public function test_shelf_edit()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asEditor()->get($shelf->getUrl('/edit'));
-        $resp->assertSeeText('Edit Bookshelf');
+        $resp->assertSeeText('Edit Shelf');
 
         $booksToInclude = Book::take(2)->get();
         $shelfInfo = [
@@ -229,8 +230,8 @@ class BookShelfTest extends TestCase
         $shelfPage = $this->get($shelf->getUrl());
         $shelfPage->assertSee($shelfInfo['name']);
         $shelfPage->assertSee($shelfInfo['description']);
-        $shelfPage->assertElementContains('.tag-item', 'Test Category');
-        $shelfPage->assertElementContains('.tag-item', 'Test Tag Value');
+        $this->withHtml($shelfPage)->assertElementContains('.tag-item', 'Test Category');
+        $this->withHtml($shelfPage)->assertElementContains('.tag-item', 'Test Tag Value');
 
         $this->assertDatabaseHas('bookshelves_books', ['bookshelf_id' => $shelf->id, 'book_id' => $booksToInclude[0]->id]);
         $this->assertDatabaseHas('bookshelves_books', ['bookshelf_id' => $shelf->id, 'book_id' => $booksToInclude[1]->id]);
@@ -238,7 +239,7 @@ class BookShelfTest extends TestCase
 
     public function test_shelf_create_new_book()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asEditor()->get($shelf->getUrl('/create-book'));
 
         $resp->assertSee('Create New Book');
@@ -269,7 +270,7 @@ class BookShelfTest extends TestCase
         $bookCount = $shelf->books()->count();
 
         $deleteViewReq = $this->asEditor()->get($shelf->getUrl('/delete'));
-        $deleteViewReq->assertSeeText('Are you sure you want to delete this bookshelf?');
+        $deleteViewReq->assertSeeText('Are you sure you want to delete this shelf?');
 
         $deleteReq = $this->delete($shelf->getUrl());
         $deleteReq->assertRedirect(url('/shelves'));
@@ -282,63 +283,67 @@ class BookShelfTest extends TestCase
         $this->assertTrue($shelf->deletions()->count() === 1);
 
         $redirectReq = $this->get($deleteReq->baseResponse->headers->get('location'));
-        $redirectReq->assertNotificationContains('Bookshelf Successfully Deleted');
+        $this->assertNotificationContains($redirectReq, 'Shelf Successfully Deleted');
     }
 
     public function test_shelf_copy_permissions()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asAdmin()->get($shelf->getUrl('/permissions'));
         $resp->assertSeeText('Copy Permissions');
         $resp->assertSee("action=\"{$shelf->getUrl('/copy-permissions')}\"", false);
 
         $child = $shelf->books()->first();
         $editorRole = $this->getEditor()->roles()->first();
-        $this->assertFalse(boolval($child->restricted), 'Child book should not be restricted by default');
+        $this->assertFalse($child->hasPermissions(), 'Child book should not be restricted by default');
         $this->assertTrue($child->permissions()->count() === 0, 'Child book should have no permissions by default');
 
-        $this->setEntityRestrictions($shelf, ['view', 'update'], [$editorRole]);
+        $this->entities->setPermissions($shelf, ['view', 'update'], [$editorRole]);
         $resp = $this->post($shelf->getUrl('/copy-permissions'));
         $child = $shelf->books()->first();
 
         $resp->assertRedirect($shelf->getUrl());
-        $this->assertTrue(boolval($child->restricted), 'Child book should now be restricted');
+        $this->assertTrue($child->hasPermissions(), 'Child book should now be restricted');
         $this->assertTrue($child->permissions()->count() === 2, 'Child book should have copied permissions');
-        $this->assertDatabaseHas('entity_permissions', ['restrictable_id' => $child->id, 'action' => 'view', 'role_id' => $editorRole->id]);
-        $this->assertDatabaseHas('entity_permissions', ['restrictable_id' => $child->id, 'action' => 'update', 'role_id' => $editorRole->id]);
+        $this->assertDatabaseHas('entity_permissions', [
+            'entity_type' => 'book',
+            'entity_id' => $child->id,
+            'role_id' => $editorRole->id,
+            'view' => true, 'update' => true, 'create' => false, 'delete' => false,
+        ]);
     }
 
     public function test_permission_page_has_a_warning_about_no_cascading()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asAdmin()->get($shelf->getUrl('/permissions'));
-        $resp->assertSeeText('Permissions on bookshelves do not automatically cascade to contained books.');
+        $resp->assertSeeText('Permissions on shelves do not automatically cascade to contained books.');
     }
 
     public function test_bookshelves_show_in_breadcrumbs_if_in_context()
     {
-        $shelf = Bookshelf::first();
+        $shelf = $this->entities->shelf();
         $shelfBook = $shelf->books()->first();
         $shelfPage = $shelfBook->pages()->first();
         $this->asAdmin();
 
         $bookVisit = $this->get($shelfBook->getUrl());
-        $bookVisit->assertElementNotContains('.breadcrumbs', 'Shelves');
-        $bookVisit->assertElementNotContains('.breadcrumbs', $shelf->getShortName());
+        $this->withHtml($bookVisit)->assertElementNotContains('.breadcrumbs', 'Shelves');
+        $this->withHtml($bookVisit)->assertElementNotContains('.breadcrumbs', $shelf->getShortName());
 
         $this->get($shelf->getUrl());
         $bookVisit = $this->get($shelfBook->getUrl());
-        $bookVisit->assertElementContains('.breadcrumbs', 'Shelves');
-        $bookVisit->assertElementContains('.breadcrumbs', $shelf->getShortName());
+        $this->withHtml($bookVisit)->assertElementContains('.breadcrumbs', 'Shelves');
+        $this->withHtml($bookVisit)->assertElementContains('.breadcrumbs', $shelf->getShortName());
 
         $pageVisit = $this->get($shelfPage->getUrl());
-        $pageVisit->assertElementContains('.breadcrumbs', 'Shelves');
-        $pageVisit->assertElementContains('.breadcrumbs', $shelf->getShortName());
+        $this->withHtml($pageVisit)->assertElementContains('.breadcrumbs', 'Shelves');
+        $this->withHtml($pageVisit)->assertElementContains('.breadcrumbs', $shelf->getShortName());
 
         $this->get('/books');
         $pageVisit = $this->get($shelfPage->getUrl());
-        $pageVisit->assertElementNotContains('.breadcrumbs', 'Shelves');
-        $pageVisit->assertElementNotContains('.breadcrumbs', $shelf->getShortName());
+        $this->withHtml($pageVisit)->assertElementNotContains('.breadcrumbs', 'Shelves');
+        $this->withHtml($pageVisit)->assertElementNotContains('.breadcrumbs', $shelf->getShortName());
     }
 
     public function test_bookshelves_show_on_book()
@@ -361,7 +366,7 @@ class BookShelfTest extends TestCase
         $newBook = Book::query()->orderBy('id', 'desc')->first();
 
         $resp = $this->asEditor()->get($newBook->getUrl());
-        $resp->assertElementContains('.tri-layout-left-contents', $shelfInfo['name']);
+        $this->withHtml($resp)->assertElementContains('.tri-layout-left-contents', $shelfInfo['name']);
 
         // Remove shelf
         $this->delete($shelf->getUrl());
@@ -372,9 +377,8 @@ class BookShelfTest extends TestCase
 
     public function test_cancel_on_child_book_creation_returns_to_original_shelf()
     {
-        /** @var Bookshelf $shelf */
-        $shelf = Bookshelf::query()->first();
+        $shelf = $this->entities->shelf();
         $resp = $this->asEditor()->get($shelf->getUrl('/create-book'));
-        $resp->assertElementContains('form a[href="' . $shelf->getUrl() . '"]', 'Cancel');
+        $this->withHtml($resp)->assertElementContains('form a[href="' . $shelf->getUrl() . '"]', 'Cancel');
     }
 }

@@ -1,6 +1,8 @@
 import {debounce} from "../services/util";
+import {transitionHeight} from "../services/animations";
+import {Component} from "./component";
 
-class DropdownSearch {
+export class DropdownSearch extends Component {
 
     setup() {
         this.elem = this.$el;
@@ -51,7 +53,9 @@ class DropdownSearch {
 
         try {
             const resp = await window.$http.get(this.getAjaxUrl(searchTerm));
+            const animate = transitionHeight(this.listContainerElem, 80);
             this.listContainerElem.innerHTML = resp.data;
+            animate();
         } catch (err) {
             console.error(err);
         }
@@ -76,5 +80,3 @@ class DropdownSearch {
     }
 
 }
-
-export default DropdownSearch;

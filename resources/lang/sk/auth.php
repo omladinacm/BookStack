@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Táto e-mailová doména nemá prístup k tejto aplikácii',
     'register_success' => 'Ďakujeme za registráciu! Teraz ste registrovaný a prihlásený.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Attempting Login',
+    'auto_init_starting_desc' => 'We\'re contacting your authentication system to start the login process. If there\'s no progress after 5 seconds you can try clicking the link below.',
+    'auto_init_start_link' => 'Proceed with authentication',
+
     // Password Reset
     'reset_password' => 'Resetovanie hesla',
     'reset_password_send_instructions' => 'Nižšie zadajte svoj e-mail, na ktorý Vám zašleme odkaz pre resetovanie hesla.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Je požadované overenie e-mailu, ale systém nemohol e-mail odoslať. Kontaktujte administrátora, aby ste sa uistili, že je e-mail nastavený správne.',
     'email_confirm_success' => 'Your email has been confirmed! You should now be able to login using this email address.',
     'email_confirm_resent' => 'Potvrdzujúci e-mail bol poslaný znovu, skontrolujte prosím svoju e-mailovú schránku.',
+    'email_confirm_thanks' => 'Thanks for confirming!',
+    'email_confirm_thanks_desc' => 'Please wait a moment while your confirmation is handled. If you are not redirected after 3 seconds press the "Continue" link below to proceed.',
 
     'email_not_confirmed' => 'E-mailová adresa nebola overená',
     'email_not_confirmed_text' => 'Vaša e-mailová adresa nebola zatiaľ overená.',

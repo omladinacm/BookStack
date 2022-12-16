@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'O domínio de e-mail usado não tem acesso permitido a esta aplicação',
     'register_success' => 'Obrigado por se registar! Você está agora registado e com a sessão iniciada.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Tentando inicar sessão',
+    'auto_init_starting_desc' => 'Estamos a aceder ao seu sistema de autenticação para iniciar o processo de login. Se não houver progresso após 5 segundos você pode tentar clicar no link abaixo.',
+    'auto_init_start_link' => 'Prosseguir com autenticação',
+
     // Password Reset
     'reset_password' => 'Redefinir Senha',
     'reset_password_send_instructions' => 'Insira o seu endereço de e-mail abaixo, e uma mensagem com o link de redefinição de palavra-passe será lhe enviada.',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'A confirmação do endereço de e-mail é requerida, mas o sistema não pôde enviar a mensagem. Por favor, entre em contacto com o administrador para se certificar que o serviço de envio de e-mails está corretamente configurado.',
     'email_confirm_success' => 'O seu endereço de email foi confirmado! Neste momento já poderá entrar usando este endereço de email.',
     'email_confirm_resent' => 'E-mail de confirmação reenviado. Por favor, verifique a sua caixa de entrada.',
+    'email_confirm_thanks' => 'Obrigado por confirmar!',
+    'email_confirm_thanks_desc' => 'Por favor, aguarde um momento enquanto a sua confirmação é tratada. Se não for redirecionado após 3 segundos pressione "Continuar" para prosseguir.',
 
     'email_not_confirmed' => 'Endereço de E-mail Não Confirmado',
     'email_not_confirmed_text' => 'O seu endereço de e-mail ainda não foi confirmado.',

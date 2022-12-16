@@ -13,7 +13,7 @@ return [
     'page_delete'                 => 'página eliminada',
     'page_delete_notification'    => 'Página excluída com sucesso.',
     'page_restore'                => 'página restaurada',
-    'page_restore_notification'   => 'Imagem restaurada com sucesso',
+    'page_restore_notification'   => 'Página restaurada com sucesso',
     'page_move'                   => 'página movida',
 
     // Chapters
@@ -28,6 +28,8 @@ return [
     // Books
     'book_create'                 => 'livro criado',
     'book_create_notification'    => 'Livro criado com sucesso',
+    'book_create_from_chapter'              => 'capítulo convertido para lívro',
+    'book_create_from_chapter_notification' => 'Capítulo convertido em livro com sucesso',
     'book_update'                 => 'livro atualizado',
     'book_update_notification'    => 'Livro atualizado com sucesso',
     'book_delete'                 => 'livro eliminado',
@@ -38,9 +40,11 @@ return [
     // Bookshelves
     'bookshelf_create'            => 'estante criada',
     'bookshelf_create_notification'    => 'Estante criada com sucesso',
+    'bookshelf_create_from_book'    => 'livro convertido para estante',
+    'bookshelf_create_from_book_notification'    => 'Livro convertido em prateleira com sucesso',
     'bookshelf_update'                 => 'estante atualizada',
     'bookshelf_update_notification'    => 'Estante atualizada com sucesso',
-    'bookshelf_delete'                 => 'excluiu a prateleira',
+    'bookshelf_delete'                 => 'prateleira excluída',
     'bookshelf_delete_notification'    => 'Estante eliminada com sucesso',
 
     // Favourites
@@ -48,11 +52,11 @@ return [
     'favourite_remove_notification' => '":name" foi removido dos seus favoritos',
 
     // MFA
-    'mfa_setup_method_notification' => 'Método de múltiplos-fatores configurado com sucesso',
-    'mfa_remove_method_notification' => 'Método de múltiplos-fatores removido com sucesso',
+    'mfa_setup_method_notification' => 'Método de autenticação por múltiplos-fatores configurado com sucesso',
+    'mfa_remove_method_notification' => 'Método de autenticação por múltiplos-fatores removido com sucesso',
 
     // Webhooks
-    'webhook_create' => 'criar webhook',
+    'webhook_create' => 'webhook criado',
     'webhook_create_notification' => 'Webhook criado com sucesso',
     'webhook_update' => 'atualizar um webhook',
     'webhook_update_notification' => 'Webhook criado com sucesso',

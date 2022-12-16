@@ -38,6 +38,11 @@ return [
     'registration_email_domain_invalid' => 'Este dominio de correo electrónico no tiene acceso a esta aplicación',
     'register_success' => '¡Gracias por registrarse! Ahora se encuentra registrado y ha accedido a la aplicación.',
 
+    // Login auto-initiation
+    'auto_init_starting' => 'Intentando iniciar sesión',
+    'auto_init_starting_desc' => 'Estamos contactando con su sistema de autenticación para comenzar el proceso de inicio de sesión. Si no hay progreso después de 5 segundos puede intentar hacer clic en el enlace de abajo.',
+    'auto_init_start_link' => 'Continuar con la autenticación',
+
     // Password Reset
     'reset_password' => 'Restablecer la contraseña',
     'reset_password_send_instructions' => 'Introduzca su correo electrónico a continuación y se le enviará un correo electrónico con un enlace para la restauración',
@@ -56,6 +61,8 @@ return [
     'email_confirm_send_error' => 'Se pidió confirmación de correo electrónico pero el sistema no pudo enviar el correo electrónico. Contacte al administrador para asegurarse que el correo electrónico está configurado correctamente.',
     'email_confirm_success' => '¡Su correo electrónico ha sido confirmado! Ahora debería poder iniciar sesión usando esta dirección de correo electrónico.',
     'email_confirm_resent' => 'Correo electrónico de confirmación reenviado, Por favor verifique su bandeja de entrada.',
+    'email_confirm_thanks' => '¡Gracias por confirmar!',
+    'email_confirm_thanks_desc' => 'Por favor, espere un momento mientras se gestiona su confirmación. Si no se lo redirige después de 3 segundos, pulse el enlace "Continuar" para seguir.',
 
     'email_not_confirmed' => 'Dirección de correo electrónico no confirmada',
     'email_not_confirmed_text' => 'Su cuenta de correo electrónico todavía no ha sido confirmada.',

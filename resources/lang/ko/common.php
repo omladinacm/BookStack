@@ -19,12 +19,13 @@ return [
     'description' => '설명',
     'role' => '권한',
     'cover_image' => '대표 이미지',
-    'cover_image_description' => '이미지 규격은 440x250px 내외입니다.',
+    'cover_image_description' => '이미지 크기는 440x250px 내외입니다.',
 
     // Actions
     'actions' => '활동',
     'view' => '보기',
     'view_all' => '모두 보기',
+    'new' => 'New',
     'create' => '만들기',
     'update' => '바꾸기',
     'edit' => '수정',
@@ -47,6 +48,8 @@ return [
     'previous' => '이전',
     'filter_active' => '적용 중:',
     'filter_clear' => '모든 필터 해제',
+    'download' => '내려받기',
+    'open_in_tab' => '탭에서 열기',
 
     // Sort Options
     'sort_options' => '정렬 기준',
@@ -78,12 +81,14 @@ return [
     'none' => '없음',
 
     // Header
+    'homepage' => 'Homepage',
     'header_menu_expand' => '헤더 메뉴 펼치기',
     'profile_menu' => '프로필',
     'view_profile' => '프로필 보기',
     'edit_profile' => '프로필 바꾸기',
     'dark_mode' => '어두운 테마',
     'light_mode' => '밝은 테마',
+    'global_search' => 'Global Search',
 
     // Layout tabs
     'tab_info' => '정보',

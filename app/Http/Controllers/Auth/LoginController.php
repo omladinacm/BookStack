@@ -8,34 +8,17 @@ use BookStack\Exceptions\LoginAttemptEmailNeededException;
 use BookStack\Exceptions\LoginAttemptException;
 use BookStack\Facades\Activity;
 use BookStack\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+    use ThrottlesLogins;
 
-    use AuthenticatesUsers;
-
-    /**
-     * Redirection paths.
-     */
-    protected $redirectTo = '/';
-    protected $redirectPath = '/';
-    protected $redirectAfterLogout = '/login';
-
-    protected $socialAuthService;
-    protected $loginService;
+    protected SocialAuthService $socialAuthService;
+    protected LoginService $loginService;
 
     /**
      * Create a new controller instance.
@@ -48,22 +31,6 @@ class LoginController extends Controller
 
         $this->socialAuthService = $socialAuthService;
         $this->loginService = $loginService;
-
-        $this->redirectPath = url('/');
-        $this->redirectAfterLogout = url('/login');
-    }
-
-    public function username()
-    {
-        return config('auth.method') === 'standard' ? 'email' : 'username';
-    }
-
-    /**
-     * Get the needed authorization credentials from the request.
-     */
-    protected function credentials(Request $request)
-    {
-        return $request->only('username', 'email', 'password');
     }
 
     /**
@@ -73,6 +40,7 @@ class LoginController extends Controller
     {
         $socialDrivers = $this->socialAuthService->getActiveDrivers();
         $authMethod = config('auth.method');
+        $preventInitiation = $request->get('prevent_auto_init') === 'true';
 
         if ($request->has('email')) {
             session()->flashInput([
@@ -84,6 +52,12 @@ class LoginController extends Controller
         // Store the previous location for redirect after login
         $this->updateIntendedFromPrevious();
 
+        if (!$preventInitiation && $this->shouldAutoInitiate()) {
+            return view('auth.login-initiate', [
+                'authMethod'    => $authMethod,
+            ]);
+        }
+
         return view('auth.login', [
             'socialDrivers' => $socialDrivers,
             'authMethod'    => $authMethod,
@@ -92,27 +66,15 @@ class LoginController extends Controller
 
     /**
      * Handle a login request to the application.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
         $this->validateLogin($request);
         $username = $request->get($this->username());
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-
+        // Check login throttling attempts to see if they've gone over the limit
+        if ($this->hasTooManyLoginAttempts($request)) {
             Activity::logFailedLogin($username);
-
             return $this->sendLockoutResponse($request);
         }
 
@@ -126,24 +88,62 @@ class LoginController extends Controller
             return $this->sendLoginAttemptExceptionResponse($exception, $request);
         }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
+        // On unsuccessful login attempt, Increment login attempts for throttling and log failed login.
         $this->incrementLoginAttempts($request);
-
         Activity::logFailedLogin($username);
 
-        return $this->sendFailedLoginResponse($request);
+        // Throw validation failure for failed login
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ])->redirectTo('/login');
+    }
+
+    /**
+     * Logout user and perform subsequent redirect.
+     */
+    public function logout(Request $request)
+    {
+        Auth::guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $redirectUri = $this->shouldAutoInitiate() ? '/login?prevent_auto_init=true' : '/';
+
+        return redirect($redirectUri);
+    }
+
+    /**
+     * Get the expected username input based upon the current auth method.
+     */
+    protected function username(): string
+    {
+        return config('auth.method') === 'standard' ? 'email' : 'username';
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     */
+    protected function credentials(Request $request): array
+    {
+        return $request->only('username', 'email', 'password');
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     * @return RedirectResponse
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+        $this->clearLoginAttempts($request);
+
+        return redirect()->intended('/');
     }
 
     /**
      * Attempt to log the user into the application.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return bool
      */
-    protected function attemptLogin(Request $request)
+    protected function attemptLogin(Request $request): bool
     {
         return $this->loginService->attempt(
             $this->credentials($request),
@@ -152,29 +152,12 @@ class LoginController extends Controller
         );
     }
 
-    /**
-     * The user has been authenticated.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param mixed                    $user
-     *
-     * @return mixed
-     */
-    protected function authenticated(Request $request, $user)
-    {
-        return redirect()->intended($this->redirectPath());
-    }
 
     /**
      * Validate the user login request.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     * @return void
+     * @throws ValidationException
      */
-    protected function validateLogin(Request $request)
+    protected function validateLogin(Request $request): void
     {
         $rules = ['password' => ['required', 'string']];
         $authMethod = config('auth.method');
@@ -209,22 +192,6 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the failed login response instance.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ])->redirectTo('/login');
-    }
-
-    /**
      * Update the intended URL location from their previous URL.
      * Ignores if not from the current app instance or if from certain
      * login or authentication routes.
@@ -250,5 +217,17 @@ class LoginController extends Controller
         }
 
         redirect()->setIntendedUrl($previous);
+    }
+
+    /**
+     * Check if login auto-initiate should be valid based upon authentication config.
+     */
+    protected function shouldAutoInitiate(): bool
+    {
+        $socialDrivers = $this->socialAuthService->getActiveDrivers();
+        $authMethod = config('auth.method');
+        $autoRedirect = config('auth.auto_initiate');
+
+        return $autoRedirect && count($socialDrivers) === 0 && in_array($authMethod, ['oidc', 'saml2']);
     }
 }

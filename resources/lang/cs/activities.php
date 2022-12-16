@@ -28,6 +28,8 @@ return [
     // Books
     'book_create'                 => 'vytvořil/a knihu',
     'book_create_notification'    => 'Kniha byla úspěšně vytvořena',
+    'book_create_from_chapter'              => 'převést kapitolu na knihu',
+    'book_create_from_chapter_notification' => 'Kapitola byla úspěšně převedena na knihu',
     'book_update'                 => 'aktualizoval/a knihu',
     'book_update_notification'    => 'Kniha byla úspěšně aktualizována',
     'book_delete'                 => 'odstranil/a knihu',
@@ -36,11 +38,13 @@ return [
     'book_sort_notification'      => 'Kniha byla úspěšně seřazena',
 
     // Bookshelves
-    'bookshelf_create'            => 'vytvořil/a knihovnu',
+    'bookshelf_create'            => 'vytvořit knihovnu',
     'bookshelf_create_notification'    => 'Knihovna byla úspěšně vytvořena',
-    'bookshelf_update'                 => 'aktualizoval/a knihovnu',
+    'bookshelf_create_from_book'    => 'převést knihu na knihovnu',
+    'bookshelf_create_from_book_notification'    => 'Kniha byla úspěšně převedena na knihovnu',
+    'bookshelf_update'                 => 'aktualizovat knihovnu',
     'bookshelf_update_notification'    => 'Knihovna byla úspěšně aktualizována',
-    'bookshelf_delete'                 => 'odstranil/a knihovnu',
+    'bookshelf_delete'                 => 'odstranit knihovnu',
     'bookshelf_delete_notification'    => 'Knihovna byla úspěšně smazána',
 
     // Favourites
@@ -60,8 +64,8 @@ return [
     'webhook_delete_notification' => 'Webhook byl úspěšně odstraněn',
 
     // Users
-    'user_update_notification' => 'User successfully updated',
-    'user_delete_notification' => 'User successfully removed',
+    'user_update_notification' => 'Uživatel byl úspěšně aktualizován',
+    'user_delete_notification' => 'Uživatel byl úspěšně odstraněn',
 
     // Other
     'commented_on'                => 'okomentoval/a',
