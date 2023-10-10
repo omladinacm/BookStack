@@ -2,10 +2,30 @@
 
 namespace Tests\User;
 
+use BookStack\Activity\Tools\UserEntityWatchOptions;
+use BookStack\Activity\WatchLevels;
 use Tests\TestCase;
 
 class UserPreferencesTest extends TestCase
 {
+    public function test_index_view()
+    {
+        $resp = $this->asEditor()->get('/preferences');
+        $resp->assertOk();
+        $resp->assertSee('Interface Keyboard Shortcuts');
+        $resp->assertSee('Edit Profile');
+    }
+
+    public function test_index_view_accessible_but_without_profile_and_notifications_for_guest_user()
+    {
+        $this->setSettings(['app-public' => 'true']);
+        $this->permissions->grantUserRolePermissions($this->users->guest(), ['receive-notifications']);
+        $resp = $this->get('/preferences');
+        $resp->assertOk();
+        $resp->assertSee('Interface Keyboard Shortcuts');
+        $resp->assertDontSee('Edit Profile');
+        $resp->assertDontSee('Notification');
+    }
     public function test_interface_shortcuts_updating()
     {
         $this->asEditor();
@@ -36,7 +56,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_body_has_shortcuts_component_when_active()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $this->actingAs($editor);
 
         $this->withHtml($this->get('/'))->assertElementNotExists('body[component="shortcuts"]');
@@ -45,9 +65,113 @@ class UserPreferencesTest extends TestCase
         $this->withHtml($this->get('/'))->assertElementExists('body[component="shortcuts"]');
     }
 
+    public function test_notification_routes_requires_notification_permission()
+    {
+        $viewer = $this->users->viewer();
+        $resp = $this->actingAs($viewer)->get('/preferences/notifications');
+        $this->assertPermissionError($resp);
+
+        $resp = $this->put('/preferences/notifications');
+        $this->assertPermissionError($resp);
+
+        $this->permissions->grantUserRolePermissions($viewer, ['receive-notifications']);
+        $resp = $this->get('/preferences/notifications');
+        $resp->assertOk();
+        $resp->assertSee('Notification Preferences');
+    }
+
+    public function test_notification_preferences_updating()
+    {
+        $editor = $this->users->editor();
+
+        // View preferences with defaults
+        $resp = $this->actingAs($editor)->get('/preferences/notifications');
+        $resp->assertSee('Notification Preferences');
+
+        $html = $this->withHtml($resp);
+        $html->assertFieldHasValue('preferences[comment-replies]', 'false');
+
+        // Update preferences
+        $resp = $this->put('/preferences/notifications', [
+            'preferences' => ['comment-replies' => 'true'],
+        ]);
+
+        $resp->assertRedirect('/preferences/notifications');
+        $resp->assertSessionHas('success', 'Notification preferences have been updated!');
+
+        // View updates to preferences page
+        $resp = $this->get('/preferences/notifications');
+        $html = $this->withHtml($resp);
+        $html->assertFieldHasValue('preferences[comment-replies]', 'true');
+    }
+
+    public function test_notification_preferences_show_watches()
+    {
+        $editor = $this->users->editor();
+        $book = $this->entities->book();
+
+        $options = new UserEntityWatchOptions($editor, $book);
+        $options->updateLevelByValue(WatchLevels::COMMENTS);
+
+        $resp = $this->actingAs($editor)->get('/preferences/notifications');
+        $resp->assertSee($book->name);
+        $resp->assertSee('All Page Updates & Comments');
+
+        $options->updateLevelByValue(WatchLevels::DEFAULT);
+
+        $resp = $this->actingAs($editor)->get('/preferences/notifications');
+        $resp->assertDontSee($book->name);
+        $resp->assertDontSee('All Page Updates & Comments');
+    }
+
+    public function test_notification_preferences_dont_error_on_deleted_items()
+    {
+        $editor = $this->users->editor();
+        $book = $this->entities->book();
+
+        $options = new UserEntityWatchOptions($editor, $book);
+        $options->updateLevelByValue(WatchLevels::COMMENTS);
+
+        $this->actingAs($editor)->delete($book->getUrl());
+        $book->refresh();
+        $this->assertNotNull($book->deleted_at);
+
+        $resp = $this->actingAs($editor)->get('/preferences/notifications');
+        $resp->assertOk();
+        $resp->assertDontSee($book->name);
+    }
+
+    public function test_notification_preferences_not_accessible_to_guest()
+    {
+        $this->setSettings(['app-public' => 'true']);
+        $guest = $this->users->guest();
+        $this->permissions->grantUserRolePermissions($guest, ['receive-notifications']);
+
+        $resp = $this->get('/preferences/notifications');
+        $this->assertPermissionError($resp);
+
+        $resp = $this->put('/preferences/notifications', [
+            'preferences' => ['comment-replies' => 'true'],
+        ]);
+        $this->assertPermissionError($resp);
+    }
+
+    public function test_notification_comment_options_only_exist_if_comments_active()
+    {
+        $resp = $this->asEditor()->get('/preferences/notifications');
+        $resp->assertSee('Notify upon comments');
+        $resp->assertSee('Notify upon replies');
+
+        setting()->put('app-disable-comments', true);
+
+        $resp = $this->get('/preferences/notifications');
+        $resp->assertDontSee('Notify upon comments');
+        $resp->assertDontSee('Notify upon replies');
+    }
+
     public function test_update_sort_preference()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $this->actingAs($editor);
 
         $updateRequest = $this->patch('/preferences/change-sort/books', [
@@ -70,7 +194,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_update_sort_bad_entity_type_handled()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $this->actingAs($editor);
 
         $updateRequest = $this->patch('/preferences/change-sort/dogs', [
@@ -85,7 +209,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_update_expansion_preference()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $this->actingAs($editor);
 
         $updateRequest = $this->patch('/preferences/change-expansion/home-details', ['expand' => 'true']);
@@ -103,7 +227,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_toggle_dark_mode()
     {
-        $home = $this->actingAs($this->getEditor())->get('/');
+        $home = $this->actingAs($this->users->editor())->get('/');
         $home->assertSee('Dark Mode');
         $this->withHtml($home)->assertElementNotExists('.dark-mode');
 
@@ -112,7 +236,7 @@ class UserPreferencesTest extends TestCase
         $prefChange->assertRedirect();
         $this->assertEquals(true, setting()->getForCurrentUser('dark-mode-enabled'));
 
-        $home = $this->actingAs($this->getEditor())->get('/');
+        $home = $this->actingAs($this->users->editor())->get('/');
         $this->withHtml($home)->assertElementExists('.dark-mode');
         $home->assertDontSee('Dark Mode');
         $home->assertSee('Light Mode');
@@ -131,9 +255,25 @@ class UserPreferencesTest extends TestCase
         $this->withHtml($home)->assertElementExists('.dark-mode');
     }
 
+    public function test_dark_mode_toggle_endpoint_changes_to_light_when_dark_by_default()
+    {
+        config()->set('setting-defaults.user.dark-mode-enabled', true);
+        $editor = $this->users->editor();
+
+        $this->assertEquals(true, setting()->getUser($editor, 'dark-mode-enabled'));
+        $prefChange = $this->actingAs($editor)->patch('/preferences/toggle-dark-mode');
+        $prefChange->assertRedirect();
+        $this->assertEquals(false, setting()->getUser($editor, 'dark-mode-enabled'));
+
+        $home = $this->get('/');
+        $this->withHtml($home)->assertElementNotExists('.dark-mode');
+        $home->assertDontSee('Light Mode');
+        $home->assertSee('Dark Mode');
+    }
+
     public function test_books_view_type_preferences_when_list()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         setting()->putUser($editor, 'books_view_type', 'list');
 
         $resp = $this->actingAs($editor)->get('/books');
@@ -144,7 +284,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_books_view_type_preferences_when_grid()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         setting()->putUser($editor, 'books_view_type', 'grid');
 
         $resp = $this->actingAs($editor)->get('/books');
@@ -153,7 +293,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_shelf_view_type_change()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $shelf = $this->entities->shelf();
         setting()->putUser($editor, 'bookshelf_view_type', 'list');
 
@@ -175,7 +315,7 @@ class UserPreferencesTest extends TestCase
 
     public function test_update_code_language_favourite()
     {
-        $editor = $this->getEditor();
+        $editor = $this->users->editor();
         $page = $this->entities->page();
         $this->actingAs($editor);
 

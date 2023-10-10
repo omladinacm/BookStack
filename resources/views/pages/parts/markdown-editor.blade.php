@@ -1,6 +1,6 @@
 <div id="markdown-editor" component="markdown-editor"
      option:markdown-editor:page-id="{{ $model->id ?? 0 }}"
-     option:markdown-editor:text-direction="{{ config('app.rtl') ? 'rtl' : 'ltr' }}"
+     option:markdown-editor:text-direction="{{ $locale->htmlDirection() }}"
      option:markdown-editor:image-upload-error-text="{{ trans('errors.image_upload_error') }}"
      option:markdown-editor:server-upload-limit-text="{{ trans('errors.server_upload_limit') }}"
      class="flex-fill flex code-fill">
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div markdown-input class="flex flex-fill">
+        <div class="flex flex-fill" dir="ltr">
             <textarea id="markdown-editor-input"
                       refs="markdown-editor@input"
                       @if($errors->has('markdown')) class="text-neg" @endif
